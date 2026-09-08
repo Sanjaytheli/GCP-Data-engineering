@@ -1,0 +1,61 @@
+Features of the cloud:
+	- distributed framework
+	- scalability
+	- replication factor 
+	- fault tolerance
+	- high availability
+	
+*************************************************************
+Practicals:
+
+==> we are going to create GCP free trail account 
+
+==> first will install one application called as "cloud sdk shell" [to complete this installation it will take 15 to 18 mins of time]
+Note: there is no dependency between this application and creation of gcp free trail account 
+
+step1: go to below url 
+https://docs.cloud.google.com/sdk/docs/install-sdk
+
+Note: better to install telegram application in your personal laptop also 
+
+step2: scroll down ==> click on windows tab ==> click on Download the Google Cloud CLI installer. ==> after that it will download a file into your downloads folder (GooglCloudSDKINstaller)
+
+step3: go to downloads folder ==> double click on this .exe file ==> agree terms and condition ==> single user/multi user ==> next / next / next / install (straight forward installation) ==> in next window it will show your green status bar (from here it will take 10mins or 15 mins or 20 mins based on your network speed)
+Note: in this installation process please dont disconnect your internet
+
+****************************************************************************************
+
+==> will start creation of google free trail account 
+
+step1: go to below url in your browser 
+https://console.cloud.google.com
+
+step2: we need to login into above url 
+
+scenario1: in your browser already you logged in by using your existing mail id, above url by default will login by using your existing mail id ==> if you want you can change your mail id
+
+scenario2: in your browser if you haven't logged in then above url will ask enter gmail id and pwd ==> enter your mail id and pwd ==> login into above url 
+
+check your mail id 
+country ==> India 
+agree terms and condition ==> click on agree and continue 
+
+step3: in next window in middle of the screen or at top right side corner you can see "Try for Free" ==> just click on that 
+
+step4: in next window it will ask your personal details and payment details 
+
+contact information ==> + symbol  ==> popup window ==> profile type (individual) ==> given your name + address + city name + pin code + state  ==> save 
+Note: credit or debit card whatever address you are having please provide same details here (atleast 60 to 70%)
+
+payment information ==> + symbol ==> click on that ==> in next page credit/debit card or by using UPI/QR code or netbanking ==> here please select credit/debit card ==> in next page card number + expiry date of card + cvv + name ==> save card 
+
+click on "start free" ==> it will ask for payment confirmation ==> confirm ==> enter cvv ==> submit ==> it will ask you to enter OTP details ==> enter that otp whatever you received on your mobile ==> verify 
+
+scenario1: if your payment is going to succeed then in next page it will ask some random questions, just provide random answers ==> submit ==> in next window in middle of the page you can able to see how much free credits your received (28700) / expiry date of your account [Your account is created successfully]
+
+scenario2: might be for some ppl you can able to see error messages as part of your payment 
+Reason1: might be your card is invalid 
+Reason2: might be your card is valid but your card is not having international transaction access [mobile transaction access + online transaction access]
+Reason3: your card is valid + your card is having international transaction access + but because of Google payment server issues also you can get error 
+
+Note: please wait for 10 to 15 mins after that try to retry one more time
