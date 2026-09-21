@@ -1,0 +1,197 @@
+1. what is data 
+2. what is information 
+3. what is DWH 
+4. what is ETL 
+5. How to perform ETL operations 
+6. Q&A
+
+****************************************************************
+
+Note: if any one of you are newly joined today please check with admin team, they will share yesterdays recording to you
+
+****************************************************************
+
+what is cloud?
+
+Cloud refers private/public network or internet from where we are going to get all the required services.
+
+services: servers, storage, databases, networking, software, dwh, analytics
+
+in our daily life knowingly or unknowingly already we are using cloud 
+
+Gmail Accounts:
+
+	Google Drive APplication: WE can able to store our files and folders [storage] [Google Cloud]
+	Photos Application: we can able to store our images and videos [storage]  [Google Cloud]
+	
+	Service ==> storage as service
+	
+	prerequisite: Internet
+	
+	
+==> You want to start a software company with your friends 
+
+1. we need to find out a location 
+2. we need to purchase all the machines 
+3. we need to purchase all the servers 
+4. we need to configure all the machines and servers 
+5. we need to establish communication between all machines and servers (networking equipment) 
+6. we need to take care of installation of OS
+7. we need to take care of installation of required SW
+8. we need to take care of installation of security patches 
+9. Maintenance activities 
+
+To do all above activities [Disadvantages]
+	a) It will take more amount of time 
+	b) we need to spend more amount of money 
+	c) infra scaleup and infra scaledown activities will become very very challenge 
+	
+Today you started your company ==> 1 project ==> 5 servers
+after 6 months ==> good work ==> 10 projects ==> increase 50 servers [Infra scaleup activity - Challenging]
+after 2 years ==> because of recession or because of market condition ==> 2 projects ==> reduce 10 servers (infra scaledown activity)
+	q: what we will do with remaining 40 servers - sell it in second hand (loss)
+	
+TO overcome all above disadvantage "CLOUD" came into the picture
+
+cloud ==> over the internet you can get any kind of services (machines/servers/networking/OS/SW)
+
+Over the internet who is providing all these kind of services ==> CLOUD provider companies
+
+1. Amazon - AWS 
+2. Microsoft - Azure 
+3. Google - GCP 
+4. ALibaba cloud 
+5. Oracle cloud 
+
+
+As a user we need to take subscription or account from above cloud platform companies 
+
+user ==> GCP account ==>
+	just I need to login into my GCP console ==> I will a request by specifying I want to get 100 machines (RAM,Hardisk,TypeofMachine,OS) ==> with that with in mins/secs your 100 machines would be ready (Over the internet)
+	
+	Laptop ==> Physical machine 
+	Virtual machine ==> Over the internet (ipaddress)
+
+Advantage what we can able to get CLOUD:
+--------------------------------------
+	1. We can complete our infra related operations with in small amount of time 
+	2. we can able to save the cost 
+	3. Infra scaleup and Infra scaledown activities become very very easy manner
+	
+	after 7 days ==> I want to reduce my number of machines as 50 ==> just submit one more request saying that delete 50 machines ==> with in mins/secs it will delete all the machines 
+		earlier you are paying the cost for 100 machines usage 
+		now you are paying the cost for only 50 machines usage 
+		
+==> ALl companies are migrating to the cloud 
+==> already some companies are migrated to the cloud 
+	
+	
+	In our classes we are going to Cover "GCP" as cloud platform 
+	
+why GCP ?
+
+in market 
+R1 ==> AWS 
+R2 ==> Azure 
+R3 ==> GCP 
+
+
+Reason1:
+--------
+==> Google want to become number 1 in cloud market, for this they are launching so many services with very less cost compare to all other cloud platforms (strategy) [next 3 to 4 years]
+
+10 years back ==> telecom ==> Airtel/vodafone/Uninor/docomo/aircel...) ==> JIO (offering so many services + with fee of cost or very less cost)
+
+At present ==> AIRTEL/JIO 
+
+Reason2:
+-------
+in market we are having so many AWS engineers and Azure engineers 
+in market you can see huge competition on AWS and Azure data engineering jobs 
+
+but from GCP side ==> we have less number of ppl in the market but we have more number of openings ==> less competition ==> easily we can able to get the jobs + you can able to get good packages 
+
+REason3: 
+--------
+Personally I am having interest on GCP 
+
+==> with in GCP what services we are going to cover ?
+
+If you go to any cloud platform we can able to see so many services ==> as cloud data engineer we need to focus on data engineering related services 
+
+
+==> How to become cloud data engineer or what would be the prerequisites to become cloud data engineer or course structure:
+
+Technical SKills:
+----------------
+a) Database concepts (SQL queries) [mysql/sqlserer/teradat/postgres]  (mysql)
+b) Programming concepts [Java/scala/Python]  (python scripting)
+c) Any one of the cloud (aws/azure/gcp) [GCP]
+		GCP:
+		1. Compute Engine [WE can create Virtual machines]
+		2. Google CLoud storage (GCS) [Storage related operations]
+		3. Bigquery (Cloud DWH)
+		4. PubSub (Streaming operations)
+		5. Cloud SQL (Database related operations) 
+		6. Dataproc (Hadoop/Spark CLuster) 
+		7. Composer (AIrflow) [AUtomation + scheduling + orchestration]
+		8. Dataflow (Batch + streaming operations) 
+				(Beam framework)
+		9. Databricks
+d) Spark Framework (Python/Java/Scala) [spark+python - Pyspark]
+e) DWH concepts 
+f) Bigadata concepts 
+h) Hadoop concepts 
+
+NOte: we need to understand how we need to integrate all above services or concepts from real time point of view
+
+how to get knowledge on above topics ? [in our upcoming classes we are going to cover all above concepts]
+
+Non technical skills:
+
+a) Agile methodology 
+b) Jira tool 
+c) Git Hub 
+d) confluence page
+
+
+Cloud SDK SHell + GCP console (infra related activities) 
+*******************************************************************************************
+I dont have any knowledge on SQL and Python ==> can I able to catch-up the classes 
+
+Note: once you are going to enroll your names our admin will share SQL + python videos to you (Day1) ==> every day you can go through one sql + one Python + regular classes ==> after 7 days or 10 days in our regular classes e are going to start disusing sql concepts 
+
+*******************************************************************************************
+Support from my/our side:
+1. Resume preparation 
+2. Interview KIT 
+3. Mock interviews 
+4. 1:1 session 
+
+==> 100% technical skills you can get on cloud data engineering side 
+
+Expectation from your side (4 imp things)
+1. You need to attend every day session (don't depend on the recording , try to attend live sessions)
+2. Please put your complete focus on the class only (I am only writing running notes)
+3. Daily practice + practice + practice 
+4. Please be interactive in the classes 
+
+if you have any kind of questions feel free to ask in class 
+
+you need to come to classes with positive mindset and also you need to leave from the classes with same positive mindset
+*******************************************************************************************
+
+Practicals also in our upcoming classes: (in next 2 days please be ready with below things)
+	prerequisites:
+	1. Personal laptop 
+	2. Gmail id
+	3. Credit card/debit card 
+	4. we will create GCP free trail account in our upcoming classes 
+			a) gmail id 
+			b) credit/debit card with international transaction access (Master/visa) 
+			NOte: from your cards money wont debit 
+*******************************************************************************************
+Regular classes are already started (Today)
+*******************************************************************************************
+
+https://comparecloud.in/
