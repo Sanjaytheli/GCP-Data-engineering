@@ -1,0 +1,53 @@
+What is cloud ?
+advantages of the cloud ?
+Cloud platforms ?
+why GCP ?
+what services we are going to cover in GCP ? 
+course structure ?
+Q&A 
+
+***********************************************************************
+
+Note: This is our 3rd session , if any one of you are newly joined today please check with admin team , they will share our previous class recordings.
+
+***********************************************************************
+
+Features of the cloud:
+
+
+1. Distributed Framework: whatever workload we are getting on top of the cluster that workload is going to distribute equally across all the nodes in the cluster, this kind of feature we are calling it as "Distributed Framework".
+
+Cluster ==> group of nodes or VM's
+nodes or VM's ==> machine which you are getting over the internet 
+
+Government ==> construct 1000 apartments ==> project ==> L&T builders
+
+L&T builders ==> construct 1000 apartments ==> 5 years of time 
+
+Government ==> this entire project ==> within 2 years ==> they given this project to 
+a) L&T builders ==> 350 
+b) X builders ==> 325 
+c) Y builders ==> 325 
+
+==> all these 3 builder will distribute all the apartment in equal manner ==> then they are going to work on their apartments in "parallel"
+
+2. Scalability: As per the requirement if you can able to increase or decrease number of resources on the fly such kind of feature we can call it as scalability.
+
+Quality thought ==> class room ==> 100 students capacity 
+
+Demo ==> Day1 ==> 30 students[E] ==> 30 chairs ==> 50 students[A] ==> we will increase chairs from 30 to 50
+[Vertical scalability]
+Demo ==> Day2 ==> 50 students[E] ==> 50 chairs ==> 80 students[A] ==> we will increase chairs from 50 to 80
+[Vertical scalability]
+Demo ==> Day3 ==> 80 students[E] ==> 80 chairs ==> 120 students[A] ==> we will increase chairs from 80 to 120 ==> here we will move class from this room to other room where we are having 150 students capacity
+[Horizontal scalability]
+
+Scalability 
+
+Resource: chairs
+
+Types of scalability:
+
+1. Vertical scalability: As per the requirement if you can able to increase or decrease number of resources on the fly "with in the system" such kind of feature we can call it as Vertical scalability.
+
+2. Horizontal scalability: As per the requirement if you can able to increase or decrease number of resources on the fly "outside of the system" such kind of feature we can call it as Horizontal scalability.
