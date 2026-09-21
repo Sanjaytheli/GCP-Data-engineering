@@ -1,0 +1,262 @@
+welcome to quality thought for learning about CLoud data engineering by using GCP as cloud platform 
+
+***********************************************************************************************
+
+introduction:
+
+Name: srinivas
+Exp: 19+ years of IT Exp 
+6 to 7 years - ETL developer and ETL dev lead [informatica/datastage/abinition/Teradata..]
+6 to 7 years - Data engineer and Data engineer lead [Hadoop stack]
+6 to 7 years - CLoud data engineer and CLoud data engineer lead [GCP / Azure]
+
+19+ years ==> Data + Data + Data 
+
+At present I am working as CLoud architect in one of the MNC company 
+
+this exp would be helpful for you as part of learning about cloud data engineering related concepts
+
+***********************************************************************************************
+
+Demo:
+
+Part1 - Technical topics - 45 to 50 mins
+Part2 - Non technical topics - 20 to 25 mins 
+
+***********************************************************************************************
+
+Cloud Data engineering:
+
+what is cloud ?
+what is Data ?
+
+
+what is Data ?
+Data is nothing but collection of raw material in unorganized format or in non meaningful format
+
+101
+102
+103
+104
+105
+
+employeeid, transactionid, customerid
+
+Ganga
+
+employeename, river name, customername
+
+
+what is information?
+
+whenever you are getting data in organized format or meaningful format such kind of data we can call it as Information.
+
+cust_id
+------
+101
+102
+103
+104
+105
+
+cust_name
+--------
+Ganga
+
+Real time example:
+------------------
+
+Citibank ==> banking domain ==> India ==> 1000 branches across India ==> to reduce cost burden they want to close 100 branches across India ==> Biz ppl / High level management / CFO / CEO
+
+Customer Transactions ==> Total turnover ==> Analysis ==> Decision 
+
+Savings ==> handle different transactions ==> store the transactions ==> .txt files ==> 2cr
+Loans ==> handle different transactions ==>  store the transactions ==>  .json files ==> 10cr
+demat ==> handle different transactions ==>  store the transactions ==>  .xml files ==> 25CR
+creditcard ==> handle different transactions ==>  store the transactions ==>  DB tables ==> 50cr
+
+Total turnover = 2cr + 10cr + 25cr + 50 = 87cr
+
+.txt + .json + .xml + .db table ==> summing operation ==> is it possible [NO] ==> Total turnover [NO] ==> analysis [NO] ==> Decision [NO]
+
+==> we are unable to achieving the requirement ==> because here we are getting all the data in unorganized format or non meaningful format [DATA]
+
+==> to achieve our requirement ==> we need to convert unorganized data into organized format
+
+Savings.txt ==> Savings table
+Loans.json ==> Loans table 
+demat.xml ==> demat table
+creditcard db table ==> creditcard db table 
+
+organized format or meaningful format [INFORMATION]
+
+.db table + .db table + .db table + .db table ==> summing operation ==> is it possible [YES] [SQL queries] ==> Total turnover [YES] ==> analysis [YES] ==> Decision [YES]
+
+summary:
+
+Data warehousing process: [DWH]
+------------------------------
+Collection of the data from different sources then we are converting unorganized data into organized format for the purpose of doing analysis to take the decision.
+
+in this DWH process what activities we need to take care ? E,T,L
+
+1. Collection of the data or extraction of the data ==> E 
+2. Converting the data or transform the data ==> T 
+3. Load the data ==> L 
+
+how we can able to perform these ETL operations ??
+
+Option1: By using available ETL tools in the market [Informatica/datastage/abinitio/SSIS..] [ETL Developers]
+	problems:
+		a) for all these ETL tools we need to take license by paying huge amounts of money 
+		b) these ETL tools can not able to handle very very huge amounts of data 
+		c) these ETL tools can not able to handle unstructured data 
+	
+	To overcome all these issues Hadoop framework came into the picture 
+	
+Option2: By using Hadoop stack [Data Engineers]
+	a) hadoop is a open source framework [free]
+	b) we can able to handle huge volumes of data 
+	c) we can able to handle unstructured data 
+	
+	to use Hadoop stack we need to create hadoop cluster 
+	
+	cluster ==> group of machines 
+	
+	to create hadoop cluster
+	
+	1. we need to purchase all the machines 
+	2. we need to configure all the machines 
+	3. we need to take care of installation of OS in all these machines
+	3. we need to take care of installation of SW in all these machines
+	3. we need to take care of installation of security patches in all these machines
+	6. we need to establish communication between all these machines by using purchasing networking components
+	7. Maintenance activities
+	
+	To do all above activities in manual manner it will take more amount of time and also we need to spend more amount of money and maintenance activities become very very challenging
+	
+	To overcome all above infra related issues "CLOUD" came into the picture.
+	
+Option3: By using cloud services [CLoud Data engineers]
+
+************************************************************************
+
+in market already some companies are migrated to the cloud 
+in market some companies are in progress to migrate to the cloud 
+in next 3 to 5 years all companies will migrate to the cloud 
+
+what is the demand for "cloud engineers" in the market ? [Very very huge demand]
+
+compare to 10 years back now we are dealing with huge amounts of data 
+after 5 years in market data will increase or decrease [data will increase rapid fastly]
+wherever we are having the data there is the role for data engineers to take care of data processing activities 
+
+what is demand for "data engineers" in the market ? [very very huge demand]
+
+in our classes we are going to cover 
+	cloud concepts + data engineering concepts ==> cloud data engineering [very very huge demand]
+	
+Note: no need to trust my words here, go to google and search for "what is the future for cloud engineers in IT market" and "what is the future for cloud data engineers in IT market"
+
+********************************************************************
+
+1. who all are eligible for this course ?
+if you are having >2 years of exp or >2 years of gap ==> eligible for this course [IT,NOn IT]
+
+Fresher: as a fresher you are also eligible but you will get less number of calls 
+
+2. I am having 8 years of exp, am I eligible ? [YES]
+
+you need to change profile 
+	8 years of exp ==> testing
+	
+	3 years of exp ==> testing 
+	4 to 5 year4s of exp ==> cloud data engineering 
+	
+3. what would be prerequisites to become cloud data engineer ? [No prerequisites]
+in our classes we are going to cover all the topics which are required for cloud data engineering side 
+
+a) database concepts (MYsql)
+b) programming language (Python)
+c) Any one of the cloud (GCP)
+why GCP ? [Tomorrows session]
+d) DWH concepts
+e) hadoop concepts 
+f) bigdata concepts 
+g) spark 
+
+h) agile methodology 
+i) jira tool 
+j) git hub 
+k) confluence pages 
+
+IN our upcoming classes we are going to cover all above topics in very very detailed manner
+
+Note: in tomorrows session we are going to spend around 20 to 25 mins to discuss about course structure
+
+4. what is duration of the classes ?
+	55 to 60 days 
+	
+5. timings of the classes ?
+	most of the classes - 7:30AM to 8:45AM
+	first one week - 8:30AM to 9:45AM
+	occasionally (10 classes) - 7:15AM to 8:30AM 
+	
+6. what would be future of CLoud data engineering?
+	Career growth - very very good 
+	Package - Very very good 
+	
+	
+	in last 2 weeks ==> around 6 members got job on cloud data engineering 
+	in last 6 months ==> around 120 members  got job on cloud data engineering 
+	
+	on and avg ==> they are getting around 15 to 18L package by keeping 3 to 4 years of exp 
+	
+	3 months back ==> full stack developer ==> joined our classes ==> 9 years of exp ==> 20L package ==> to 42L package
+	
+7. as part of our classes:
+		after every day session:
+				a) we will share notes
+				b) daily recordings 
+				c) materials 
+				d) assignments 
+				
+8. after completion of the classes:
+		a) sample resumes + resume preparation 
+		b) mock interviews (2) ==> middle of the course + end of the course 
+		c) 1:1 sessions with every student
+		d) interview kit
+		
+		==> 2 real time projects ==> retail domain 
+
+*************************************************************************************************
+Basics ==> advanced ==> very advanced 
+
+==> you need to attend all the classes 
+==> you need to focus on the classes 
+==> every day you need to do the practice 
+==> you need to complete all the assignments 
+==> you need to do handson activities on the projects
+
+Non IT ppl + IT ppL 
+Exp ppl + non exp ppl 
+
+
+Q&A:
+
+
+Internship program ==> you need to sit in institute for 8 hours
+
+Fee and other details and internship programm ==> check admin team 
+*************************************************************************************************
+==> by using GCP free trail account we will do all the practice for next 3 months 
+
+==> after preparation of your resume ==> my mail id ==> review ==> feedback ==> changes ==> then only resume into the job portals
+
+*************************************************************************************************
+those ppl will inform any opening in their company ==> we will inform to you ==> apply for those jobs 
+
+Completely online classes 
+
+Cloud professional data engineer certification (GCP) ==> this is not mandatory to get the jobs 
+*************************************************************************************************
