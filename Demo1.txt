@@ -1,30 +1,6 @@
 welcome to quality thought for learning about CLoud data engineering by using GCP as cloud platform 
 
 ***********************************************************************************************
-
-introduction:
-
-Name: srinivas
-Exp: 19+ years of IT Exp 
-6 to 7 years - ETL developer and ETL dev lead [informatica/datastage/abinition/Teradata..]
-6 to 7 years - Data engineer and Data engineer lead [Hadoop stack]
-6 to 7 years - CLoud data engineer and CLoud data engineer lead [GCP / Azure]
-
-19+ years ==> Data + Data + Data 
-
-At present I am working as CLoud architect in one of the MNC company 
-
-this exp would be helpful for you as part of learning about cloud data engineering related concepts
-
-***********************************************************************************************
-
-Demo:
-
-Part1 - Technical topics - 45 to 50 mins
-Part2 - Non technical topics - 20 to 25 mins 
-
-***********************************************************************************************
-
 Cloud Data engineering:
 
 what is cloud ?
