@@ -1,0 +1,164 @@
+
+Mapreduce
+	==> how it works
+	==> problems with MR 
+Spark
+	==> what is spark 
+	==> how it works 
+	==> features of spark 
+	==> advantages of spark 
+differences between Mapreduce and Spark
+
+***********************************************************
+
+Spark ==> inmemory (data processing)
+
+==> Apache spark provide two main abstractions for working with distributed data 
+	a) RDD  (older approach)
+	b) Dataframe (newer approach)
+	
+Spark Framework:
+---------------
+Read data from text file (1L) (From the Harddisk) [LFS & HDFS & GCS] ==> Filter1 (50K) ==> write result into inmemory ==> Read data from inmemory ==> Filter2 (25K) ==> write result into inmemory ==> Read data from inmemory ==> Grouping ==> write result into inmemory ==> Read data from inmemory ==> summing operation ==> Final result ==> write this final result into our harddisk 
+
+Read data from text file (1L) (From the Harddisk) [LFS & HDFS & GCS] ==> Filter1 (50K) ==> write result into inmemory ==> Read data from RDD/Dataframe ==> Filter2 (25K) ==> write result into inmemory ==> Read data from RDD/Dataframe ==> Grouping ==> write result into inmemory ==> Read data from Rdd/Dataframe ==> summing operation ==> Final result ==> write this final result into our harddisk 
+
+what is RDD? [Resilient Distributed Dataset]
+- IN pyspark, RDD is a fundamental data structure which is used for distributed data processing
+- RDD are designed to be immutable, distributed collection of data that can be process in parallel across cluster of nodes
+
+==> immutable: Rdd are read-only, which means we can not change content of RDD once it is created. We can create a new RDD by using existing RDD. We can create RDD when we are performing our data read operations and also we can create RDD when we are applying our transformations.
+
+while applying transformation source is RDD, what is our target is RDD
+
+spark ==> reading data from a text file  (LFS/HDFS/GCS..) ==> RDD1 (1L)
+RDD1 ==> Filter1 operations (50K) ==> RDD2
+RDD2 ==> Filter2 operations (25K) ==> RDD3
+
+Note: in above statement just we can replace RDD with dataframe
+
+==> Distributed: RDDS are distribute across multiple nodes in a cluster, and it allows for parallel processing on top of our data.
+
+storage: parallel 
+processing: parallel
+
+==> RDDs can represent both structured and unstructured data 
+==> RDDs can support transformations and actions 
+==> RDD are laziness 
+==> RDDS are required low level coding , low level APIs (application programming interface)
+==> Error detection and debugging are kind of challenges as part of using RDDs
+
+To simplify our coding + to take care of error detection and debugging operations in easy manner "DATAFRAMES" are introduced.
+
+what is dataframe?
+
+==> Dataframes are distributed data collections which are arranged into rows and columns in pyspark.
+==> Dataframes are comparable to relations database tables
+==> Dataframes are going to have column names and datatypes
+
+==> Dataframe is a higher level abstraction which is built on top of RDD
+==> while using dataframes we can able to use high level apis, bcz of that reason we can simplify the code
+==> dataframes perfectly suitable when you are dealing with structured data 
+==> on top dataframes also we can able to apply transformations and actions
+==> dataframes provide high level apis with operations similar to those found in sql side
+
+table ==> filter ==> where 
+table ==> sorting ==> order by 
+==> dataframes leverage spark catalyst optimizer and Tungsten execution engine, bcz of this reason dataframes are providing optimization for query execution/code execution
+
+
+while applying transformation source is Dataframe, what is our target is Dataframe
+
+spark ==> reading data from a text file  (LFS/HDFS/GCS..) ==> Dataframe1 (1L)
+Dataframe1 ==> Filter1 operations (50K) ==> Dataframe2
+Dataframe2 ==> Filter2 operations (25K) ==> Dataframe3
+
+==> once dataframes are created we can not able to modify the data in that dataframe (immutable)
+
+***********************************************************************************************
+
+while using spark we are going to use below components 
+
+1. spark context 
+2. spark session
+
+1. spark context : this is primary responsible for coordinating and managing spark application, including resource allocation and task scheduling 
+2. spark session: this is an entry point for structured data processing, by using this we can able to high level apis
+
+
+1. spark context : If you want to deal with RDD first we need to create spark context component
+2. spark session : If you want to deal with dataframe first we need to create spark session component
+
+***********************************************************************************************
+
+Practicals:
+
+
+********************************************************
+
+Before performing all above activities we need to take care below prerequisites
+
+Done - 1. Enable API using below linke ["Change project Number"] [from gcp console] https://console.developers.google.com/apis/api/cloudresourcemanager.googleapis.com/overview?project=129647610870
+Note: if you are able to use enable api, just click on that. If you are able to see disable api, dont perform any operations.
+Done - 2. while creation of the cluster we need to provide access and we need to enable few roles [IAM service]
+Go to IAM service ==> click on Grant access ==> below inputs 
+principal name: 129647610870-compute@developer.gserviceaccount.com
+roles: 
+Storage Admin
+Environment and Storage Object Administrator
+dataproc worker
+
+********************************************************
+
+Done - 0. we need to go to our gcp console 
+Done - 1. we need to go to our dataproc service  [search bar ==> dataproc ==> select managed apache spark service]
+Note: in overview section if you are able to see enable api, just click on that (wait for 10 to 15 seconds)
+Done - 2. we need to create our dataproc clusters (hadoop/spark)
+		==> single node cluster 
+		==> multi node cluster 
+		
+		10 node cluster 
+		1 master 
+		9 slave/worker nodes
+		
+		10 node cluster 
+		3 master 
+		7 slave/worker nodes
+		
+		single node cluster 
+		same node is going to act as master + worker node
+		
+	Note: while doing our practicals we are going to create single node cluster (save cost)
+	
+left side ==> go to clusters section ==> click on create cluster 
+clustername:
+region: by default (us-central1)
+Note: some times we are getting errors while creation of cluster by using us-central1 region (quota is not available) ==> then change the region (us-east4)
+define cluster shape ==> development (single node cluster)
+[imp] ==< go to additional configruations section ==> we ned to disable internally ip only property
+Finally click on create button ==> just wait 40 sec to 60 secs [cluster will create ] [status - running]
+
+
+Done - 4. we need to connect to our dataproc cluster (putty application (generate the keys + configure ppk file))
+	done - a) generate they keys by using puttygen 
+	done - b) generate ppk file by using puttygen
+	done - c) configure the keys in our dataproc cluster
+	click on cluster name ==> go to VM instances tab ==> click on your machine ==> click on edit ==> go to ssh key section ==> provide our key ==> save
+	d) by using putty we can connect to our cluster (ipaddress + ppk file)
+	
+	there is one more option ==> beside your machine we can see connect ==> click on open in browse ==> authenticate
+	
+	Note: why we are not getting external IP I will check and confirm you
+
+ssh-rsa AAAAB3NzaC1yc2EAAAADAQABAAABAQDZWyMmWaWgdASn2EHNhz7NkyOuMElg4Bj4XT47sHRjgWfgomqc+Dk6rWRQdLl33ZCF/zG9TzEr9z2n64Jp33fSVhsJW5YYRR0cDMRSySvAi7JRK5IetVXojCX49ZXyWaBusLd8wqGc574ulmt1OF6VYZfRGIVbzTqAMuHmEPMGjKizgIJGaYpqzWBxE3SCZ+nMu9piNlUC7oFZhYb/Ue6nJ/Bpoxt4o5u2ic+vMJCz5I81TS3YZrZ0aVqtcuYwgulEpIGxZ91wu+zjOAV/TuvM29I3q1Y6Yh4bloKcYKqmfnbEhGgwPU7Qn92RHsiuzZIZqzH0ZMTyaVSgLab/0t01 sample
+
+Done - 5. then we can able to perform our hadoop activities or spark activities
+
+to connect to the spark ==>
+
+a) spark-shell [spark+scala]
+b) pyspark [spark+python]
+c) spark-sql [spark+sql]
+
+Note: after doing all your activities upto here please stop your cluster (please dont delete the cluster)
+****************************************************************************
