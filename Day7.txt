@@ -1,0 +1,124 @@
+
+GCP ==>
+	Compute engine
+	==> why compute engine?
+	==> features of compute engine?
+	==> how to create VM by using compute engine?
+	==> how to connect to VM by using putty shell?
+	
+**********************************************************************
+
+By using VM what kind of activities we can able to perform 
+
+==> we will launch a small web application on our VM 
+Note: in real time as a data engineer we are not going to build web applications
+
+==> 
+Done - 1. we need to be ready with our VM 
+Done - 2. connect to our VM by using putty shell (generate and configure the keys)
+
+Q: whatever the keys yesterday we generated and whatever the ppk file we generated yesterday can we use same for todays VM ? [YES] ==> as per best practice in real time we should not reuse same key and ppk file for different VM's.
+
+ssh-rsa AAAAB3NzaC1yc2EAAAADAQABAAABAQCGi7Bk521rd4gOLlxfdlLNkQOvwBKOmHWxJin6Rk9unfd9T9Zyzwxj9pB/E/UZpwVn5vtomQjEiTwxy6gX1zrnavA1KSPI8wK26PnAwibNxKBQOTcXwpkRa4h0EJbyfsNtsdPlOiWcq5v/vvi4dMaE8cC5y8IEegVfApVIRGVizLKNArBphoVhrVKkLN69v4wJbGpoc/d9Me9aX7gpCnw6venECxfreWqD1bSpFxhV10LoVoTgFOjfDdP0aZ8yDyUwBrr+jFfASV9W8RQKApD+wCtOi5vo/PzqaQ9+/CPSpCQwoF+sLF9eOWid9YqU90WPNyftBTW8bOWAOiz2rEnj sample
+
+Done - 3. on top of our VM we need to enable firewalls [allow http and https firewall]
+Done - 4. on top of our VM we need to install apache web server 
+sudo apt install apache2
+Done - 5. to see web application content we need to create a index.html file (by default we will have a index.html file, on top of that we are going to take care code changes)
+
+sudo nano /var/www/html/index.html
+
+==> to remove the lines of the code from index.html ==> ctrl+k
+==> if you want to save and exit from the file ==> ctrl+x
+
+<!DOCTYPE html>
+<html>
+<head>
+<title> Hello. world </title>
+</head>
+<body>
+<h1> hello world</h1>
+</body>
+</html>
+
+Done - 6. Now we need to open our web application 
+browser ==> pass VM ipaddress 
+
+****************************************************************************
+sudo nano /var/www/html/index.html
+
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Basic HTML with Coloring and Text</title>
+</head>
+<body style="background-color: #f2f2f2;">
+    <h1 style="color: #008CBA;">Hello, Cdebatch</h1>
+    <p style="color: #4CAF50;">Practice makes perfect, but perfect practice makes champions..</p>
+    <p style="color: #FF0000;">Practice</p>
+    <p style="color: #FF8C00;">Practice</p>
+</body>
+</html>
+****************************************************************************
+
+VM ==> Linux ==> run our unix commands 
+
+sample@cdebatch:~$ [unix prompt]
+>>> [Python prompt]
+
+1. I want to see list of the files and folders in VM: ls
+2. I want to create a folder: mkdir foldername
+		mkdir srinivas
+3. in which folder I am working: pwd
+4. if you want to switch from one folder to other folder: cd foldername		
+		cd srinivas
+5. I want to come back to my previous folder:
+		option1: cd /home/sample
+		option2: cd ..
+6. How to create a file: cat > filename
+		cat > sample.txt
+		enter your content 
+		ctrl+d
+7. I want to see the content of the file: cat filename
+8. I want to see all the content in reverse order: tac filename 
+9. I want to see top 2 records of the file: head -n filename
+		head -2 sample.txt
+10. I want to see last 2 records of the file: tail -n filename
+		tail -2 sample.txt
+11. TO copy the file from one location to other location: cp sourcepath targetpath
+		cp /home/sample/sample.txt /home/sample/srinivas/.
+		cp /home/sample/sample.txt /home/sample/srinivas/yy.txt
+		cp /home/sample/sample.txt /home/sample/srinivas/xyz/yy.txt [unix - error]
+		
+		option1: cd srinivas
+			   : ls
+		option2: ls /home/sample/srinivas
+12. I want to delete the file yy.txt : rm filename
+		rm /home/sample/srinivas/sample.txt
+		
+After the class I will share one excel file, in that you can able to list of unix commands. Please do practice of all those command after our session.
+
+******************************************************************************************
+
+==> in my laptop I am having a file sample.txt ==> I want to get this file into my VM (Cloud)
+		==> to take care of this kind of activities we can able to use one more third party application called as "WINSCP"
+	
+1. cloud sdk shell application: with out using GCP console if you want to do cloud activities then we can use this application
+2. putty gen application: to generate the keys and to create the ppk file 
+3. putty application: to connect with our VM 
+4. winscp: to copy files from local system to our VM 
+
+==> if you want to use winscp application 
+
+step1: we need to download winscp application by using below url 
+https://winscp.net/eng/download.php
+step2: click on download winscp 6.5.6 (after few second it will download a 12MB file into your downloads folder)
+step3: go to downloads folder ==> double click on .exe file ==> agree terms and condition / single user or multi user / next next next install [straight forward installation]
+step4: we need to open winscp application 
+start ==> winscp ==> click on winscp application
+
+hostname: VM ipaddress
+username: sample
+ppk file: click on advanced ==> ssh ==> authentication ==> provide your ppk file path 
+
+************************************************************************************************
