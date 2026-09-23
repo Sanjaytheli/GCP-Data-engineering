@@ -1,0 +1,113 @@
+==> download and installation of cloud sdk shell application
+==> we taken care of creation GCP free trail account 
+
+*******************************************************************************
+
+1. earlier while creation of gcp free trail account it didn't ask any amount to pay as prepaid amount, but now a days Google is asking pay some prepaid amount for some people. ==> you can goahead and pay that amount (2K,3K,1K,4500) ==> after 3 months of your expiration ==> with one week or 10 days your money will credit back to your card
+
+2. Imp note: Please dont click on any buttons/link with out knowing what it is
+		after creation of our free trail account , you will get some mails and messages from google. In those mails and messages you can able to see few links, dont click on those links.
+		
+		once your free  trail account is created no need to take any additional activities [if any such kind of action items required I will inform you in the class]
+		
+*******************************************************************************
+==> bcz of any reason if your account not created by using your card, then you can try with other card by following below instructions 
+		a) better to use a new mail id again
+		b) try to create account by using other laptop 
+		c) change your wifi or mobile network 
+*******************************************************************************
+
+==> I want to use my GCP free trail account for our practice 
+
+1. Open GCP console from browser by using below url by passing your gmailid and pwd (gcp account gmail id)
+https://console.cloud.google.com
+2. If you want to explore all the services of GCP cloud platform 
+
+cloudstorage
+bigquery
+
+
+Option1:
+gcp console ==> left top side ==> navigation menu ==> at bottom we need to click on view all products ==> select category ==> click on your service name
+
+Option2:
+gcp console ==> middle top ==> search bar ==> type your service name ==> click on our service name
+
+Assignment: Explore all categories of GCP cloud platform , and explore what services are available in GCP 
+
+==> if you want to do any activities on GCP cloud first we need to create a project 
+
+gcp console ==> middle top ==> beside search bar ==> click on project picker ==> popup window ==> right side top ==> click on new project ==> 
+	project name: cdebatch57
+	organization: no organization
+	
+after creation of the project ==> click on select project
+
+Note: while creation of the project google will give project id and project number
+
+==> I want to see list of the projects 
+
+gcp console ==> middle top ==> beside search bar ==> click on project picker ==> list of the projects
+
+==> I want to switch from one project to other project 
+
+gcp console ==> middle top ==> beside search bar ==> click on project picker ==> list of the projects
+
+Note: whenever you are login into gcp console first we need to cross verify your gmail id and project
+
+in real time who will create GCP account ? [Admin team / Devops team]
+in real time for every team member are we going to create one gcp account? [NO] [for entire project we are going to have single GCP account]
+in real time in gcp console who will create the project ? [Admin team / Devops team]
+in real time how you can able to login and how you can able to understand your project name ? [Admin team / Devops team]
+
+**************************************************************************************
+
+==> in real time in some of the projects you are not going to get "GCP console" access because of security reasons, with out having Gcp console access how we can able to perform our cloud activities ? By using "CLOUD SDK SHELL" application 
+
+in real time 80 to 85% of the projects you wont get console access ? "cloud sdk shell"
+in real time in 15 to 20% of the projects you will get access for GCP console ? "GCP Console"
+
+GCP Console:
+-------------
+create a project 
+list of the projects
+switch from one project to other project
+
+Cloud SDK Shell:
+----------------
+create a project 
+list of the projects
+switch from one project to other project
+
+Done - step1: Download and install cloud sdk shell application
+step2: we need to open our cloud sdk shell 
+Done - start ==> type cloud sdk ==> click on google cloud sdk shell ==> it will open a black window
+
+Cloud sdk shell (laptop) ==> create a project (GCP account)
+		==> for this we need to establish communication between our laptop to our gcp account [configuration of the settings] ==> gcloud init
+		
+		you want to login (y/n) ? y ==> enter ==> by default it will open a browser window ==> select gmail account (GCP account)==> continue ==> submit ==> it will display a message your authentication is completed ==> just come back to your black window ==> what it showing ?? [project ids]
+		
+		==> if you want to see your configurations on cloud sdk shell ?? gcloud config list
+		Note: whenever you re going to open cloud sdk shell verify your configurations (gcp account / project)
+		
+		==> I want to create a new project ?? gcloud init
+		
+		==> I want to see list of the projects ?? gcloud projects list
+		
+		Note: whatever you are doing in console it will reflect in sdk shell, and whatever we are doing in sdk shell it will reflect in console.
+		
+		==> I want to switch from one project to other project ? gcloud init
+		
+		
+*************************************************************************
+
+in our upcoming classes for every service we will do practicals on both gcp console and cloud sdk shell 
+
+*************************************************************************
+
+Practice
+
+*************************************************************************
+
+Note: Tomorrow no classes 
