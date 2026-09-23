@@ -1,0 +1,179 @@
+Spark transformations
+read/write data from HDFS + GCS buckets
+
+****************************************************************
+
+so far we are reading data from single file , in real time we are going to work on on multiples files as per biz requirements 
+
+Req: I want to read data from customer_lo.json file and also customer_ny.json files , combine all customers data from both the files then I want to filter out grade=100 customers and then final result I want to capture into my target file.
+
+A1:
+--
+customer_lo_df=spark.read.format("json").load("gs://cdebatch5758sparkusecase/source/customer_lo.json")
+customer_ny_df=spark.read.format("json").load("gs://cdebatch5758sparkusecase/source/customer_ny.json")
+union_df=customer_lo_df.union(customer_ny_df)
+filter_df=union_df.filter(union_df.grade==100)
+filter_df.show()
+
+union: as per requirement whenever you want to do merging operations between different dataframes in vertical direction then we can use union transformation
+syntax: df1.union(df2)
+
+****************************************************************
+
+Note: to improve performance better to apply filter ASAP in our code.
+
+A2:
+--
+customer_lo_df=spark.read.format("json").load("gs://cdebatch5758sparkusecase/source/customer_lo.json")
+customer_ny_df=spark.read.format("json").load("gs://cdebatch5758sparkusecase/source/customer_ny.json")
+cust_lo_filter_df=customer_lo_df.filter(customer_lo_df.grade==100)
+cust_ny_filter_df=customer_ny_df.filter(customer_ny_df.grade==100)
+union_df=cust_lo_filter_df.union(cust_ny_filter_df)
+filter_df.show()
+
+****************************************************************
+
+Req: I want to read data from customer_lo.json file and also customer_ny.json files , combine all customers data from both the files then I want to filter out grade=100 customers, I want to add one additional column country_cd, then in this column wherever city='london' populate value as 'lo' and if city <> 'london' then populate values as 'xx' ==>  and then final result I want to capture into my target file.
+
+==> in this requirement we need to implement kind of if-else logic 
+if city='london' then 'lo'
+else 'xx'
+
+==> from spark side if you want to implement if-else logic we can apply "when" and "otherwise"
+
+
+from pyspark.sql.functions import col,lit,when
+customer_lo_df=spark.read.format("json").load("gs://cdebatch5758sparkusecase/source/customer_lo.json")
+customer_ny_df=spark.read.format("json").load("gs://cdebatch5758sparkusecase/source/customer_ny.json")
+cust_lo_filter_df=customer_lo_df.filter(customer_lo_df.grade==100)
+cust_ny_filter_df=customer_ny_df.filter(customer_ny_df.grade==100)
+union_df=cust_lo_filter_df.union(cust_ny_filter_df)
+withColumn_df=union_df.withColumn("country_cd",when((col("city")=="London"),lit("lo")).otherwise(lit("xx")))
+withColumn_df.show()
+
+****************************************************************
+
+customer_lo.json
+salesman_lo.json 
+
+vertical merging operation ??
+
+vertically ==> union 
+horizantol ==> join 
+
+df1=customer_lo.json
+df2=customer_ny.json
+df3=customer_in.json
+df4=customer_us.json
+df5=customer_sg.json
+
+df1.union(df2).union(df3).union(df4).union(df5)
+
+x_df=df1.union(df2)
+y_df=x_df.union(df3)
+
+********************************************************************
+
+Req: Read data from customer_lo.json file after that I want to understand total how many records we are having in this file
+
+customer_lo_df=spark.read.format("json").load("gs://cdebatch5758sparkusecase/source/customer_lo.json")
+print(customer_lo_df.count())
+
+
+count(): to find out how many records we are having in dataframe for that we can use count()
+
+Req: Read data from customer_lo.json file, find out how many unique grade values we are having in this file.
+
+A1:
+----
+customer_lo_df=spark.read.format("json").load("gs://cdebatch5758sparkusecase/source/customer_lo.json")
+df1=customer_lo_df.select("grade").distinct()
+df1.show()
+print(df1.count())
+
+100
+200
+300
+
+3
+
+distinct(): from a particular column if you wan to find out all unique values or distinct values then we can use distinct() transformation
+
+A2:
+----
+
+from pyspark.sql.functions import countDistinct
+customer_lo_df=spark.read.format("json").load("gs://cdebatch5758sparkusecase/source/customer_lo.json")
+df1=customer_lo_df.select(countDistinct("grade"))
+df1.show()
+
+************************************************************************
+
+==> in all above examples we are using our "spark transformations" to achieve our requirements, if you are using spark transformations to achieve our requirements that kind of approach we can call it as "SPARK DSL" approach. [DSL - domain specific language]
+
+==> all above example we can handle with out using spark transformations, instead of using spark transformations we can use our "SQL queries". If you are u sing sql queries to achieve our requirements that approach we can call it "SPARK SQL" approach.
+
+==> we need to follow below steps to follow spark sql approach 
+
+step1: read data from the file with that create a dataframe
+step2: on top of this dataframe we are going to create a temp view (temp_v)
+dataframe.createOrReplaceTempView("temp_v")
+step3: now by using above temp view we can frame our sql statement, after that we need to pass this sql query into spark.sql()
+df=spark.sql("select * from temp_v where grade=200")
+step4: df.show()
+	   dfs.write.format.save....
+	   
+*******************************************************
+
+table ==> physically data would be available 
+view  ==> virtual tables (data wont present physically)
+
+*******************************************************
+"SPARK SQL"
+
+customer_lo_df=spark.read.format("json").load("gs://cdebatch5758sparkusecase/source/customer_lo.json")
+customer_lo_df.createOrReplaceTempView("customer_lo_v")
+filter_df=spark.sql("select * from customer_lo_v where grade=200")
+filter_df.show()
+
+*******************************************************
+
+"SPARK DSL"
+
+customer_lo_df=spark.read.format("json").load("gs://cdebatch5758sparkusecase/source/customer_lo.json")
+filter_df=customer_lo_df.filter(customer_lo_df.grade==200)
+filter_df.show()
+
+*******************************************************
+
+Note: Both approaches will give same performance. 
+
+==> if you are having good knowledge on sql side ==> then we can follow "spark sql" approach
+==> if you are having good knowledge on programming side ==> then we can follow "spark dsl" approach
+
+==> in real time your lead or managers will decide which approach we need to follow
+
+*******************************************************
+"spark dsl"
+
+from pyspark.sql.functions import col,lit,when
+customer_lo_df=spark.read.format("json").load("gs://cdebatch5758sparkusecase/source/customer_lo.json")
+customer_ny_df=spark.read.format("json").load("gs://cdebatch5758sparkusecase/source/customer_ny.json")
+cust_lo_filter_df=customer_lo_df.filter(customer_lo_df.grade==100)
+cust_ny_filter_df=customer_ny_df.filter(customer_ny_df.grade==100)
+union_df=cust_lo_filter_df.union(cust_ny_filter_df)
+union_df.show()
+
+"spark sql"
+
+customer_lo_df=spark.read.format("json").load("gs://cdebatch5758sparkusecase/source/customer_lo.json")
+customer_ny_df=spark.read.format("json").load("gs://cdebatch5758sparkusecase/source/customer_ny.json")
+customer_lo_df.createOrReplaceTempView("customer_lo_v")
+customer_ny_df.createOrReplaceTempView("customer_ny_v")
+final_df=spark.sql("select * from customer_lo_v where grade=100 union select * from customer_ny_v where grade=100")
+final_df.show()
+
+*******************************************************
+
+Assignment1: first complete practice of all above examples by using spark dsl approach.
+Assignment2: whatever examples we covered so far try to replicate same examples by using spark.sql approach
