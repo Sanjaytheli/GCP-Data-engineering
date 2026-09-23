@@ -1,0 +1,179 @@
+How we can able to use VM which are created by using compute engine service 
+UNix commands 
+Winscp application
+
+*************************************************************************************
+
+Dataproc Service:
+-----------------
+
+--> This is one of the very important service from cloud data engineer perspective
+--> in real time 40 to 50% of your time we are going to work on this service 
+--> from interviews point of view this service is very important 
+
+next 15 to 18 days ==> spend time on this service 
+
+==> what is dataproc ?
+	By using dataproc service we can able to create Hadoop cluster/Spark cluster, with that we can able to perform our data processing related activities.
+	
+==> Dataproc is a cloud based service which is designed to run big data processing jobs efficiently. It handles the complexities of setting and manage clusters based on your requirement, so you can focus on analyzing your data and processing your data.
+
+cluster ==> group of the machines 
+
+earlier days ==> 
+to create hadoop and spark clusters ==> manually on-premise location 
+	1. we need to purchase all the machines 
+	2. configure all the machines 
+	3. to establish communication we need to purchase networking components 
+	4. we need to configure all networking components 
+	5. in all the machines we need to install required OS
+	6. in all the machines we need to install required SW
+	7. in all the machines we need to install required Framework
+	8. in all the machines we need to install security patches 
+	9. Maintenance activities 
+	
+To take care of all above activities manually ==> 
+		a) it will take more amount of time 
+		b) we need to spend more amount of money 
+		
+TO overcome above issues ==> we can adopt the cloud ==> GCP ==> Dataproc service ==> hadoop cluster / spark cluster
+
+==> if you want to create VMs ==> compute engine ==> whatever VM we are creating in those machines are we going to get hadoop and spark [NO]
+
+==> dataproc ==> cluster ==> group of the machines ==> in all these machines by default you will get spark and hadoop framework 
+			==> with this we are going to spend our time only on data processing operations and data analysis operations (removing cluster maintenance activities and installation of required applications)
+			
+Features of dataproc:
+--------------------
+
+1. Fully managed service: Google take care of the infrastructure, so you dont need to worry about setting up or maintenance of servers.
+2. Scalability: you can easily scaleup or scaledown your cluster capacity based on your requirement
+3. cost-effective: whatever resources we are using only for that we need to pay the money
+4. Integrate this service with other GCP services:
+		dataproc + compute engine 
+		dataproc + GCS 
+		dataproc + biquery
+		dataproc + pubsub
+		
+==> primary purpose of dataproc service?
+		a) to process/analyze the data 
+		b) to create/manage clusters 
+		
+==> on dataproc cluster we can able to perform our data processing operations ?? [For this we are using Spark / Hadoop framework]
+
+what is bigdata ?
+what is hadoop ?
+what is spark ?
+
+
+==> what is bigdata?
+
+large amount of data  / Huge data (GB / Terabytes / Petabytes )
+
+
+==> what is data ?
+		data is nothing but collection of raw material in unorganized format or in non meaningful 
+		
+you are having 5 ltrs of water bottle ==> you need to fill 2 ltr water (small capacity)
+you are having 1 ltrs of water bottle ==> you need to fill 2 ltr water (huge capacity)
+
+==> Bigdata refers extremely large and complex datasets that can not able easily managed or processed or analyzed by using traditional data processing tools.
+
+Databases: store the data + process the data (limited amounts of the data)
+
+3 v's + 5 v's + 20 v's
+
+Volume: Bigdata involves massive amounts of the data. It can range from terabytes data to petabytes of data. Traditional databases and tools can not able to handle this much of volumes of the data
+
+Velocity: Data is generated and collected at an unprecedented speed in todays world. Social mediat posts, sensor data, online transactions ...etc
+
+Variety: Bigdata comes in various formats of the data ==> which includes structured data (tables) , unstructured data (Videos and logs and images..), semi structured data (json, xml files..etc)
+
+************************************************************************************
+floppy disk (2MB/5MB) ==> CDs (700MB/1GB) ==> DVDs (3GB/5GB) ==> Pendrives (16GB/8GB/1TB) ==> harddisk ==> SSD 
+
+what kind of problem we are going to face with bigdata?
+
+1. storage 
+2. data processing
+
+To overcome storage issues and to overcome data processing issue "HADOOP" framework came into the  picture.
+
+==> Apache Hadoop is a powerful open source framework which is designed to process and store and analyze large volumes of data across the cluster in distributed manner.
+
+Hadoop ==> store huge volumes of data (where ??? ) ==> on top of our machines ==> Cloud ==> dataproc (hadoop cluster)
+
+Laptop1 
+Laptop2 
+
+1. in between these two laptops we need to establish communication 
+2. capacity of our laptop is less 
+3. distribution is directly not possible on top of your personal laptops (to enable this we need to use Hadoop framework) ==> download and install hadoop framework manual manner [to overcome these manual activities we can use dataproc services from GCP cloud side]
+
+Dataproc ==> clusters ==> group of VMs ==> Default Hadoop framework ==> store huge amounts of data + complex data processing operations 
+
+In between these VMs how data is going to distribute in equal manner ==> [HADOOP]
+
+Hadoop:
+
+1. To store the data : [HDFS] [Hadoop Distributed File System]
+
+==> laptop ==> folder ==> store our files [Local File system]
+==> hadoop ==> HDFS [data storage going to happen in distributed manner]
+
+2. Data processing operations: [Map Reduce(MR)]
+
+Important characteristics of hadoop:
+
+1. Distributed framework: whatever the workload we are getting that workload will distribute across all the nodes in the cluster in parallel manner.
+2. Replication Factor: Your data on every machine will take it as backup into other machines, this kind of data we can call it as replicated data. whenever a machine is going to fail then by using other machines we can revert the data.
+3. Fault Tolerance: whenever a machine is going to fail then automatically other machines will come into the picture to take care of all the responsibilities of the failed machines
+4. BLock based storage: Your data is going to divide into fixed size blocks (128MB or 256MB) and distributed across the nodes in the cluster.
+5. Master - Slave architecture:
+		Master node (name node)
+		Slave node (data nodes)
+
+How cluster can enable to understand in which node which block of data it is stored ?
+
+8 Node cluster ==> 
+		1 node ==> master nodes
+		7 node ==> slave nodes 
+
+Master node:
+	a) it will maintain all the metadata of our slave nodes (data about data ==> data about slave machines)
+			1. it will maintain ipaddress of every slave machine
+			2. it will maintain configurations of every slave machine 
+			3. it is going to maintain health status of every slave machine 
+			4. will provide guidance to slave nodes what tasks need to execute and what data need to store in which slave node
+			5. master node will capture in which slave node which block of data has been stored 
+
+Slave node: 
+	a) slave nodes will save all the actual data 
+	b) slave nodes will take care of actual execution activities
+
+==> real time project ==> 20 members in our project 
+		a) one Team lead : [Master node]
+				1. he will provide guidance to all the team members 
+				2. what tasks they need to work , by when they need to complete the work, priority of the task
+				3. team members names 
+				   exp of each and every team member 
+				   skill set of each and every team member 
+				   strength and weakness of every team member
+				   leave plan of every team member
+				He need to have all the details of every team member (Metadata) ==> data about all our team members [data about the data]
+		b) 19 members are team members :
+				1. you will take care of project execution activities
+				
+*******************************************************************************************************
+
+Dataproc ==>
+	Cluster ==> 
+		Hadoop / Spark cluster ==> Bigdata processing operations 
+			what is bigdata ?
+				hadoop framework ?
+						HDFS 
+						MR 
+				Spark Framework ? (tomorrow session)
+				
+				
+**********************************************************************************
