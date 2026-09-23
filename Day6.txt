@@ -1,0 +1,88 @@
+
+Compute Engine:
+	==> by using this service we can able to create Virtual machines
+	
+CLoud: if you can able to get any kind of services over the internet such kind of system we can call it as cloud (machines/servers/databases/dwh..)
+
+==> personal laptop ==> physical machine 
+==> you are going to get machine over the internet ==> Virtual machines 
+
+By using this service just by passing very basic inputs we can able to create our VM's. [RAM, Harddisk, vcpu, OS..]
+
+==> GCP compute engine is a salable and flexible service which is offering that allows your to run Virtual machines on Google data centers.
+
+==> As part of creation of VM by using compute engine service we can able to select 
+		a) different types of configurations of the machines (general purpose, compute optimized , memory optimized,GEnAI, ML purpose)
+		b) based on our requirement we can select our required OS while creation of VM 
+		c) based on our requirement we can able to integrate compute engine service with other GCP services also 
+		
+Compute engine + dataproc service 
+
+
+Dataproc service ==> spark/hadoop cluster 
+Cluster ==> Group of VMs ==> Compute engine
+
+Compute engine ==> create VM ==> in this VM we wont able to see any kind of application (empty VM) ==> if you want we can able to install all required applications (install spark + install hadoop..)
+
+Dataproc ==> cluster ==> group of VM ==> in these machines by default we are going to get spark framework + hadoop framework [to get other applications here also we need to take care of installation..)
+
+***************************************************************************
+
+Done - ==> created VM by using Compute engine service 
+Done - ==> connect to our VM [IPAddress + Third party applications(putty)]
+
+1. Open GCP console 
+2. go to compute engine 
+3. create instance 
+left side panel ==> click on VM instances ==> create instance 
+	machine name
+	region/zone - default values
+	machine type - E2 series
+	left side second tab ==> there if you want we can change our OS
+	click on create (with 30 to 40 seconds it will create your VM)
+4. we need to pass basic inputs 
+
+Note: whatever we are discussing today this topic is V.Imp to understand our upcoming 10 to 15 classes
+
+Note: after completion of your practice better to stop or delete the VM to save the cost (better to delete the machine) (otherwise if you want we can stop the machine)
+
+==> connect to our VM (IPAddress + Third party applications(putty))
+
+step1: download putty application by using below url
+https://www.puttygen.com/download-putty
+scroll down ==> go to MSI (‘Windows Installer for putty’) section ==> click on "putty-64bit-0.83-installer.msi" link  [Today we are getting error in this page]
+	alternative ==> whatever zip file I shared in telegram ==> please download that ==> unzip that file ==> you can able to see putty_xxxx.exe
+step2: double click on this .exe file ==> agree terms and condition ==> single user/multi user ==> next next next install (straight forward installation)
+
+putty application (laptop) ==> connect to VM (Cloud - GCP account)
+we need to establish communication between Putty application and VM (Use Keys)
+
+putty - 123
+VM - 123 
+
+Done - 1. we need to populate the keys ==> puttygen application (no need to install this, by default when we are installing putty we will get putty gen also)
+	start ==> putty ==> click on puttygen application ==> click on generate ==> move the mouse in above section ==> after generation of the key please change key comment (it will act as user name in our next steps) ==> after this copy paste complete key into our notepad (just for our reference)
+
+ssh-rsa AAAAB3NzaC1yc2EAAAADAQABAAABAQChj7RIRRysy8DHXfHXS/rf9fkAJrCpuOmcwMcboK2PCOpUpNjvySJkN4GrRXEVNv/l43aqUAKiS78EXhIaQrcDlu19Lq9YMMqN8V69Eg1ETMi3NhH9c9MMEGXIv2zE9lriL/8Gur0patOkqzA8E3QRuoXlQyNpypm9UYk/0JXC5aCXuysARp+p2dOqlfsJVLuooBbAT0HEZa2uzzLT5PJ4U7kUzZBai7zJjs5QNKEU9wK/nozVvjooZHBMtVn467TtG1xs7AgAjzR5vsUaftlSb2KhJo50IovrH9AG6FYB7yBHHI+UsIxgCvu4F+k32VggdrHEY8jqTQxw2m+KTi0j sample
+
+Done - 2. to save the key in file ==> puttygen application ==> click on save private key ==> give path and give file name ==> with this it will create our PPK file 
+
+Done - 3. configure the key in our VM 
+	GCp console ==> compute engine ==> click on our VM ==> edit button ==> scroll down ==> SSH keys section ==> add button ==> copy pasting our key ==> save 
+	
+Done - 4. Open putty application ==> [Ipaddress + .ppk file]
+		VM Ip address ==> go to VM ==> go to "Network interfaces" section ==> copy paste your external ip address [34.30.7.182]
+		
+		start ==> putty ==> click on putty application ==> ipaddress (copy paste ipaddess) ==> left side panel ==>connection ==> click on ssh ==>  auth ==> credentials ==> private key click on browse ==> select ppk file ==> open 
+
+
+**************************************************************************************
+
+All above activities we can complete in 1 min
+
+By using this VM ==> 
+		a) we can run unix commands
+		b) we can perform our python operations (python3) (ctrl+d)
+		c) launch a web application 
+		
+**************************************************************************************
