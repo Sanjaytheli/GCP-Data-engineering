@@ -1,0 +1,12 @@
+Spark transformations
+Spark DSL approach 
+Spark SQL approach
+
+*******************************************************
+Spark SQL approach ==> we need to have knowledge on SQL queries 
+
+==> todays session we will take different scenarios, for every scenario will try to understand how we can write our spark code and also will try to understand how to write sql queries
+
+Note: refer excel sheet for todays notes
+
+Note: Please stop your dataproc clusters every day after your practice
