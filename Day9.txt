@@ -1,0 +1,142 @@
+
+Dataproc service:
+	1. what is dataproc 
+	2. purpose of dataproc 
+	3. features of dataproc 
+			4. what is bigdata 
+			5. what is hadoop
+					6. HDFS
+					7. Features of hadoop/hdfs
+					8. MR
+*****************************************************************
+
+Hadoop ==>
+	a) storage - HDFS
+	b) data processing - MR 
+	
+Mapreduce: 
+	Mapreduce is a programming model and processing engine for the purpose of taking care of distributed data processing.
+Map: The map phase processes and filters data, it will populate all the results in key,value format. (key,value)
+Reduce: The reduce phase aggregate and summarize the data based on key value.
+
+Map:
+----
+(a,1)
+(a,1)
+(b,1)
+(c,1)
+(b,1)
+
+Reduce:
+-------
+a,1+1 ==> a,2
+b,1+1 ==> b,2
+c,1   ==> c,1
+
+==> As part of MR programming model all input (read) and output (write) operations are going to happen on Hardisk only.
+
+
+==> Read data from a text file ==> filter out US records ==> filter out records where grade=200 ==> for every department id I want to find out how many employees are working ==> write results into my target file 
+
+
+==> ALl above operations we need to take care by using MR programming model
+
+Read data from text file (1L) (From the Harddisk) [LFS & HDFS] ==> Filter1 (50K) ==> write result into Harddisk ==> Read data from harddisk ==> Filter2 (25K) ==> write result into Harddisk ==> Read data from harddisk ==> Grouping ==> write result into Harddisk ==> Read data from harddisk ==> summing operation ==> Final result ==> write this final result into our harddisk 
+
+==> Read + write operations (I/O operations) are happening repeatedly on top of Harddisk ==> because of this reason MR is giving bad performance
+
+==> we are applying MR on Huge amounts of data + MR performing all operations on top of hard disk ==> because of these two reason we are going to get very very bad performance
+
+C:/drive ==> word document ==> double click ==> open our document [first time] [Hard disk]
+Go back to same word document ==> task bar ==> in short span of time we can see our document from task bar ==> RAM memory 
+
+TO overcome all above kind of issue "SPARK" framework came into the picture
+
+Before spark ==> in all the project projects ppl started adopting MR framework ==> slowly they realized that MR giving bad performance ==> after that ppl started adopting SPark framework into their project
+
+==> Spark is going to take care of all the operations on top of "InMemory" [RAM memory] ==> bcz of this reason Spark providing 100X fast performance compare to MR
+
+
+Spark Framework:
+---------------
+Read data from text file (1L) (From the Harddisk) [LFS & HDFS & GCS] ==> Filter1 (50K) ==> write result into inmemory ==> Read data from inmemory ==> Filter2 (25K) ==> write result into inmemory ==> Read data from inmemory ==> Grouping ==> write result into inmemory ==> Read data from inmemory ==> summing operation ==> Final result ==> write this final result into our harddisk 
+
+==> whenever spark session is going to terminate then all the memory which is available in RAM or Inmemory will be flushed / deleted automatically.
+
+==> spark ==> read and write (I/O operations) ==> it is happening on inmemory [Very very good performance]
+
+==> What is Spark?
+Apache spark is an open-source and distributed data processing framework which is designed for large scale data processing and analytics.
+
+Hadoop:
+	storage component: HDFS
+	processing component: MR
+	
+Spark:
+	storage component: no storage component 
+	" only data processing operations "
+	
+	Read the data (spark) ==> data processing (spark) ==> write the data (spark)
+	
+	Spark can able to read data from HDFS, LFS, GCS, AWS s3 bucket, Azure blob storage, database tables
+	Spark can able to write data to HDFS, LFS, GCS, AWS s3 bucket, Azure blob storage, database tables
+	
+Features of Spark:
+-------------------
+1. In memory processing 
+2. Distributed Data processing 
+3. Easy of Use
+==> in Mapreduce to achieve one requirement if you are going to 100 lines of the code same we can able to achieve in spark by using 6 to 10 lines of code.
+4. Versatile data processing models
+		a) batch processing
+		b) streaming processing 
+		c) machine learning 
+		d) graph processing 
+5.  Spark can able to read data from HDFS, LFS, GCS, AWS s3 bucket, Azure blob storage, database tables
+	Spark can able to write data to HDFS, LFS, GCS, AWS s3 bucket, Azure blob storage, database tables
+6. Spark can able to integrate with any cloud services 
+7. Spark is very faster compare to MR 
+8. Spark uses lazy evolution technique
+==> with in spark we can perform two types of operations (Transformations/Action)
+		filter   ==> transformation
+		grouping ==> transformation
+		summing  ==> transformation 
+		write operation ==> Action 
+		
+		T1
+		T2
+		T3
+		T4
+		T5
+		A1
+		
+		==> whenever you are going to call the Action then only all the Transformations will trigger one by one
+9. Spark framework programming we can perform by using below languages [Java/Scala/Python/SQL]
+			Spark+Python [PYspark]
+			Spark+SQL
+10. Spark is environment independent (windows, linux, gcp, aws, azure) [Portability]
+
+***********************************************************************************************
+
+==> Differences between MR and Spark 
+
+	MR										Spark
+----------------------------------------------------------
+1. Haddisk operations					1. Inmemory operations
+2. Complex to use						2. Easy of use 
+3. Low performance						3. Good performance
+4. Linear Execution						4. Lazy
+5. Complex programming					5. Simple programming
+
+***********************************************************************************************
+
+Dataproc ==> 
+		Hadoop cluster / Spark cluster 
+		==> dataproc cluster ==> group of VM ==> default Hadoop framework and Spark framework
+		==> dataproc cluster ==> how to perform data processing operations
+
+***********************************************************************************************	
+
+dataproc cluster ==> group of VM ==> spark framework ==> inmemory processing operation (RAM memory)	
+
+***********************************************************************************************
