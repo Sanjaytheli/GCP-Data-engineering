@@ -1,0 +1,112 @@
+Dataproc ==> Spark ==>
+	RDD
+	Dataframe
+	SparkContext
+	SparkSession
+	
+==> how to create dataproc cluter 
+==> How to connect to our dataproc cluster
+
+*****************************************************************************
+
+1. Yesterday from console we created dataproc cluster, but in that cluster for VM we are not getting External IP Address (this is kind of bug from GCP side, we can't do anything for now to fix)
+
+2. Alternative is, by using cloud sdk shell with below command we can create cluster. With this approach we are able to getting external IP address. So create cluster by using below command for our practicals.
+
+gcloud dataproc clusters create cdebatch2 --enable-component-gateway --region us-east4 --single-node --master-machine-type e2-standard-2 --master-boot-disk-type pd-balanced --master-boot-disk-size 100 --image-version 2.2-debian12 --public-ip-address --project robotic-century-498104-f4
+
+In above command "cdebatch2" is cluster name, if you want you can change name
+robotic-century-498104-f4 ==> this is my project id, please change it to your project id (not project number)
+
+By using above command once cluster created, all remaining steps are common as we discussed in yesterday session
+
+
+***************************************************************
+
+Note: Tomorrow onward before starting the class itself I will start my cluster and I will connect to my putty shell
+
+dataproc cluster ==> we can connect to our spark 
+
+spark-shell
+pyspark
+spark-sql
+
+**************************************************************
+
+spark ==> data processing ==> to perform data processing activities what would be prerequisite ? [we need to have the data in files]
+
+Telegram group ==> files.zip file ==> download that file into your laptop ==> unzip that file ==> csv folder and json folder 
+
+Above Files ==> are available in your laptop (LFS) ==> we are going to copy all these files into HDFS 
+
+dataproc cluster ==> spark / hadoop 
+
+Hadoop ==>
+	storage (HDFS)
+	processing (MR)
+	
+	LFS ==> HDFS (copy the files)
+	
+	Dataproc cluster ==> VM ==> Linux ==> Folders (LFS) ==> HDFS
+	
+	windows OS ==> Folders/files ==> LFS 
+	Linux OS ==> Folders/Files ==> LFS 
+	
+	Done - step1:
+	copy the files from LFS (windows) to LFS (VM-Linux folders)  [winscp]
+	mkdir source
+	
+	Done - step2:
+	Copy the files from LFS (VM-Linus folders) to HDFS (VM - Hadoop framework) [HDFS commands]
+	
+	1. If you want to see list of the files or folder in HDFS ==> hdfs dfs -ls /
+	2. If you want to create a folder in HDFS ==> hdfs dfs -mkdir /sourcehdfs
+	3. COpy the files from LFS to HDFS ==> hdfs dfs -put sourcepath targetpath
+			hdfs dfs -put /home/sample/source/customer_lo.json /sourcehdfs
+			hdfs dfs -put /home/sample/source/*.* /sourcehdfs
+			
+****************************************************************************
+pyspark
+>>>
+
+whenever you want to perform data processing operations by using spark first step is "Read data from the files"
+
+customer_lo_df=spark.read.format("json").load("/sourcehdfs/customer_lo.json")
+customer_lo_df.show()
+
+Req: ==> From above dataframe I want to see data for particular columns ==> "SELECT" transformation
+
+Table ==> c1,c2,c3,c4,c5 
+select c1,c2 from table;
+
+select_df=customer_lo_df.select("customer_id","cust_name","grade")
+select_df.show()
+
+==> in above example we are performing data processing operations ==> we are hiding the columns
+
+Req: ==> From above dataframe I want to filter out grade=200 records ==> "FILTER" transformation 
+
+filter_df=select_df.filter(select_df.grade==200)
+filter_df.show()
+
+==> in above example we are performing data processing operations ==> we are hiding the rows (Filtering the records)
+
+==> to take care of write operations we need to write below line of the code 
+
+dataframe.write.format("").save("")
+filter_df.write.format("json").save("/sourcehdfs/target/")
+
+How to prove my write operations is complete or not ??
+Option1:
+	hdfs dfs -ls /sourcehdfs/target/
+Option2:
+	df=spark.read.format("json").load("/sourcehdfs/target/")
+	df.show()
+
+
+***************************************************************************
+customer_lo_df=spark.read.format("json").load("/sourcehdfs/customer_lo.json")
+select_df=customer_lo_df.select("customer_id","cust_name","grade")
+filter_df=select_df.filter(select_df.grade==200)
+filter_df.write.format("json").mode("overwrite").save("/sourcehdfs/target/")
+***************************************************************************
