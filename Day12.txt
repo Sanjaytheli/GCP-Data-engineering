@@ -1,0 +1,161 @@
+
+==> how to create cluster 
+==> how to connect to the cluster
+==> how to launch pyspark 
+==> how to read + write + transformations (data processing) operations
+
+***********************************************************************************
+
+select: whenever you want to fetch particular columns from dataframe then we can use select transformations
+
+filter: as per the requirement if you want to filter our particular records based on conditions then we can use filter transformations
+
+***************************************************************************
+customer_lo_df=spark.read.format("json").load("/sourcehdfs/customer_lo.json")
+select_df=customer_lo_df.select("customer_id","cust_name","grade")
+filter_df=select_df.filter(select_df.grade==200)
+filter_df.write.format("json").mode("overwrite").save("/sourcehdfs/target/")
+***************************************************************************
+
+==> while using filter we can follow some alternate approach
+
+option1: filter_df=select_df.filter(select_df.grade==200)
+
+option2:
+
+from pyspark.sql.functions import col
+customer_lo_df=spark.read.format("json").load("/sourcehdfs/customer_lo.json")
+select_df=customer_lo_df.select("customer_id","cust_name","grade")
+filter_df=select_df.filter(col("grade")==200)
+filter_df.write.format("json").mode("overwrite").save("/sourcehdfs/target/")
+
+***************************************************************************
+
+==> based on our convince we can able to merge multiple transformations into single line of the code
+
+from pyspark.sql.functions import col
+customer_lo_df=spark.read.format("json").load("/sourcehdfs/customer_lo.json")
+filter_df=customer_lo_df.select("customer_id","cust_name","grade").filter(col("grade")==200)
+filter_df.write.format("json").mode("overwrite").save("/sourcehdfs/target/")
+
+***************************************************************************
+
+filter_df=customer_lo_df.select("customer_id","cust_name","grade").filter(col("grade")==200)
+filter_df.show()
+
+customer_lo_df.select("customer_id","cust_name","grade").filter(col("grade")==200).show()
+
+***************************************************************************
+
+==> by using spark we can able to perform read operations only from HDFS [wrong statement]
+==> by using spark we can read data from multiple sources + write data to different target
+
+==> same above example I want to run by reading data from GCS bucket and by writing data into gcs bucket
+
+prerequisites:
+-------------
+Done - a. we need to create the bucket 
+
+gsutil mb gs://cdebatch5758sparkusecase
+
+Note: above command we can trigger from cloud sdk shell otherwise we can trigger same command from our putty shell also
+
+Done - b. in that bucket we need to upload our file 
+
+gsutil cp sourcepath targetpath
+gsutil cp /home/sample/source/*.* gs://cdebatch5758sparkusecase/source/
+
+
+Note: while creation of dataproc cluster in backend by default it will create some buckets with naming conventions staging and temp, dont delete those buckets. If you delete your cluster wont work properly.
+
+***************************************************************************
+
+from pyspark.sql.functions import col
+customer_lo_df=spark.read.format("json").load("gs://cdebatch5758sparkusecase/source/customer_lo.json")
+select_df=customer_lo_df.select("customer_id","cust_name","grade")
+filter_df=select_df.filter(col("grade")==200)
+filter_df.write.format("json").mode("overwrite").save("gs://cdebatch5758sparkusecase/target/")
+
+***************************************************************************
+
+gsutil ls gs://cdebatch5758sparkusecase/target/
+
+***************************************************************************
+
+==> how to use col function 
+==> how to use multiple transformations with in single line
+==> how to perform read + write operations by using gcs buckets
+
+***************************************************************************
+
+Req: Read data from customer_lo.json file, after that for every record on top of grade I want to increase value as +100 by adding new column called as grade_new, ==> then fetch customer_id, customer_name, grade_new columns into my target file 
+
+A1:
+
+customer_lo_df=spark.read.format("json").load("gs://cdebatch5758sparkusecase/source/customer_lo.json")
+withcolumn_df=customer_lo_df.withColumn("grade_new",col("grade")+100)
+withcolumn_df.show()
+select_df=withcolumn_df.select("customer_id","cust_name","grade_new")
+select_df.show()
+select_df.write.format("json").mode("overwrite").save("gs://cdebatch5758sparkusecase/target1/")
+
+
+withColumn(): with in dataframe if you want to change the data or if you want to add a new column as per requirement then we can use this transformation.
+syntax: withColumn(colname,expression)
+withColumn("grade_new",col("grade")+100)
+
+***************************************************************************
+A2:
+
+customer_lo_df=spark.read.format("json").load("gs://cdebatch5758sparkusecase/source/customer_lo.json")
+withcolumn_df=customer_lo_df.withColumn("grade_new",col("grade")+100).select("customer_id","cust_name","grade_new")
+withcolumn_df.show()
+withcolumn_df.write.format("json").mode("overwrite").save("gs://cdebatch5758sparkusecase/target1/")
+
+***************************************************************************
+
+Req: I want to read data from customer_lo.json file, after that I want to add a new column as country_cd and in this column I want to populate all values as "lo". Then write results into our target file.
+
+from pyspark.sql.functions import col,lit
+customer_lo_df=spark.read.format("json").load("gs://cdebatch5758sparkusecase/source/customer_lo.json")
+withCOlumn_df=customer_lo_df.withColumn("country_cd",lit("lo"))
+withCOlumn_df.show()
+
+==> in spark whenever you want to populate kind of static values there we can able to use lit function
+
+***************************************************************************
+
+Req: I want to read data from customer_lo.json file, then I want to replace grade column with grade_new column. Then write results into my target file.
+
+
+==> I want to replace grade column with grade_new column ==> rename grade column as grade_new 
+
+
+A1:
+---
+customer_lo_df=spark.read.format("json").load("gs://cdebatch5758sparkusecase/source/customer_lo.json")
+withColumn_df=customer_lo_df.withColumn("grade_new",col("grade"))
+select_df=withColumn_df.select("city","cust_name","customer_id","salesman_id","grade_new")
+select_df.show()
+
+==> from the datafram to pick few columns we are using select transformation, instead of this in spark we can use one more transformation drop().
+
+drop(): from a dataframe whenever you want to skip particular columns then we can use drop() transformation
+
+A2:
+----
+customer_lo_df=spark.read.format("json").load("gs://cdebatch5758sparkusecase/source/customer_lo.json")
+withColumn_df=customer_lo_df.withColumn("grade_new",col("grade"))
+drop_df=withColumn_df.drop("grade")
+drop_df.show()
+
+withColumnRenamed(): whenever you want to rename column names in your dataframe then we can use this transformation
+syntax: withColumnRenamed(oldcolumn,newcolumn)
+
+A3:
+----
+customer_lo_df=spark.read.format("json").load("gs://cdebatch5758sparkusecase/source/customer_lo.json")
+withColumnRenamed_df=customer_lo_df.withColumnRenamed("grade","grade_new")
+withColumnRenamed_df.show()
+
+*****************************************************************************
