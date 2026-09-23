@@ -1,0 +1,159 @@
+
+Google cloud storage service 
+
+==> purpose of this service
+==> features of this service
+==> bucket 
+		a) name
+		b) location
+		c) storage classes
+		d) control the access
+		
+*********************************************************
+
+e) How to protect data on top of our bucket:
+
+create a bucket ==> upload our file 
+
+
+day1:
+customer.txt
+custid,custname,custexpenses
+101,srini,1000
+102,vasu,2000
+
+day2:
+customer.txt
+custid,custname,custexpenses
+101,srini,1000
+102,vasu,2000
+103,aa,3000
+104,bb,4000
+
+day1 ==> we are uploading this customer.txt file into our gcs bucket ==> with out any issues your file will upload
+day2 ==> we are uploading this customer.txt file into our gcs bucket ==> overwrite our previous day1 file ==> and it will upload our day2 file ==> after 1 hour you realized that you uploaded a wrong file , now you want to revert your day1 file in to our bucket ==> is it possible [??]
+
+is it possible [Yes/No]
+
+crate Bucket ==> Versioning ==> by default this feature is in disable mode [we can not able to revert our previous file [NO]]
+
+Versioning ==> we can enable this feature ==> [we can able to revert our previous file [YES]]
+
+Versioning ==> enabled 
+
+day2 ==> we are uploading this customer.txt file into our gcs bucket ==> it will take backup of our day1 file (customer.txt_5234553452435) ==> overwrite our previous day1 file ==> and it will upload our day2 file ==> after 1 hour you realized that you uploaded a wrong file , now you want to revert your day1 file in to our bucket ==> is it possible [YES] [by using backup file which it is created]
+
+day3 ==> we are uploading this customer.txt file into our gcs bucket ==> it will take backup of our day2 file (customer.txt_5234553452435) ==> overwrite our previous day2 file
+
+day 100 ==> how many backup files we can see ==> 99 backup files on our bucket ==> really these many backup file are required ?? [NO]
+
+when we are going to enable versioning features we have to give below two inputs
+	a) how many backups/versions you want to maintain [10]
+	b) expiration period of your backup file [4]
+	
+==> after few days I deleted customer.txt file from our GCS bucket ==> after 1 hour you realized that by mistake you deleted this file ==> on top of our bucket it will enable "soft delete" ==> because of this feature when you deleted your file you can revert that file with in next 7 days ==> if you want we can able to increase duration of soft delete
+
+bucket:
+	customers.txt
+	
+	bcz of some reason this file has been leaked from our gcs bucket ==> whenever files or data leaked on top of that also we can provide protection by enabling "encryption" feature
+	
+	srinivas   ==> encryption ==> aasdfsdfafasdfasfasd
+	3543532435 ==> encryption ==> 6434653463463463656636456
+	
+	==> From google side they give default encryption keys 
+	
+	Bank OF America ==> number 1 bank in US ==> they are using GCP cloud platform ==> uploading their customers file into GCS bucket ==> BOA is having some doubt on Google itself ==> to overcome this kind of issues Google introduced "Custom encryption keys" 
+	
+*******************************************************************************
+
+practicals:
+
+GCP Console:
+------------
+
+Done - 0. I want to see list of the buckets
+Done - 1. I want to create a bucket 
+Done - 2. I want to upload the files 
+Done - 3. I want to upload a folder into my bucket 
+Done - 4. I want to create a new folder into my bucket 
+Done - 5. I want to copy the files from one bucket to other bucket 
+Done - 6. I want to delete the files from the bucket 
+Done - 7. I want to delete my complete bucket 
+
+
+step1: open GCP console  [verify our mail id and project]
+https://console.cloud.google.com
+step2: go to gcs service 
+	option1: Navigation menu 
+	option2: search bar
+step3: go to buckets from left side panel ==> click on create ==> 
+
+
+
+Cloud SDK Shell:
+-----------------
+step1: start ==> cloud sdk ==> click on google cloud sdk shell application
+step2: verify your account and project ==> gcloud config list
+
+Note: from cloud sdk shell if you want to do any activities on google cloud storage service we need to use "gsutil" utility
+
+Note: to avoid confusions while doing practice please connect to same project in both sdk and also console
+
+Done - 0. I want to see list of the buckets: gsutil ls 
+									: gsutil ls gs://cdebatch58srinivas0701/
+									: gsutil ls gs://cdebatch58srinivas0701/Batch58/
+Done - 1. I want to create a bucket : gsutil mb bucketname
+Note: in cloud sdk shell wherever you want to give your bucket name we need to give prefix as gs://
+gsutil mb gs://cdebatch58srinivassdk
+
+
+Done - 2. I want to upload the files [copy the file]: gsutil cp sourcepath targetpath
+gsutil cp C:\Education\QT-GCP\1_Batches\Batch58\202606290830-ClassNotes.txt gs://cdebatch58srinivassdk
+gsutil cp C:\Education\QT-GCP\1_Batches\Batch58\202606290830-ClassNotes.txt gs://cdebatch58srinivassdk/xx.txt
+gsutil cp C:\Education\QT-GCP\1_Batches\Batch58\202606290830-ClassNotes.txt gs://cdebatch58srinivassdk/sample/
+
+
+Done - 3. I want to upload a folder into my bucket :
+gsutil cp -r C:\Education\QT-GCP\1_Batches\Batch58\ gs://cdebatch58srinivassdk
+
+-r ==> recursive 
+
+4. I want to create a new folder into my bucket 
+Note: there is no specific command in sdk shell to create the folder
+
+Done - 5. I want to copy the files from one bucket to other bucket :
+gsutil cp gs://cdebatch58srinivassdk/202606290830-ClassNotes.txt gs://cdebatch58srinivas0702/srinivas.txt
+
+
+Done - 6. I want to delete the files from the bucket 
+gsutil rm filename
+7. I want to delete my complete bucket 
+
+
+*****************************************************************************************
+
+Note1: 
+	might be for some ppl you can able to get erros while running above command (you dont have the access)
+	solution: while opening your sdk shell please open it in admin format 
+	
+Note2: when you are providing your file path or folder path better to avoid spaces in file name or folder name
+
+gsutil cp "C:\Education\QT GCP\1_Batches\Batch58\202606290830-ClassNotes.txt" gs://cdebatch58srinivassdk
+
+Note3: better to connect to same project in both console and also in cloud sdk shell 
+
+
+***********************************************************************************
+
+Compute engine:
+
+every day our classes will start at 7:30AM sharply 
+Today I spent 1:30 time for our session 
+
+***********************************************************************************
+
+gsutil help
+gsutil mb
+
+***********************************************************************************
