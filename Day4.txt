@@ -1,0 +1,132 @@
+
+GCP console and Cloud sdk shell:
+
+1. how to create a project 
+2. how to see list of the projects 
+3. how we can switch from one project to other project 
+
+*********************************************************************
+
+GCP Services:
+
+==> cloud refers internet from where we can get any kind of services
+
+GCP ==> around 180 to 200 services [we are going to focus more on data engineering services]
+
+*********************************************************************
+
+Google Cloud Storage: [GCS]
+
+GCS ==> by using this service we can able to store files/folders/objects 
+
+==> Google cloud storage is a "fully managed object storage" service provided by Google cloud platform. By using this service we can upload or retrieve any amounts of data at any point of time simply over the internet.
+
+fully managed: while using GCS service as a user no need to configure any infra related things, directly open GCS service and directly you can upload any amounts of data as per requirement. In backend google will take care of all required infra configurations.
+
+laptop ==> 100GB hard disk ==>
+	day1 ==> 10GB data in your laptop ==> no problem 
+	day2 ==> 150GB data in your laptop ==> it is not possible directly ==> we need to extend our harddisk (purchase 200GB harddisk)
+	day3 ==> 250GB data in your laptop ==> it is not possible directly ==> we need to extend our harddisk (purchase 500GB harddisk)
+
+in above example we need to purchase and we need to configure our infra components manually
+
+But while using our GCS serivce from user side no need to take care of any infra configurations activities 
+
+GCS ==> 100GB data ==> as a user no need to configure any infra component (in backend google will allocate all required infra resources automatically)
+GCS ==> 1000GB data ==> as a user no need to configure any infra component (in backend google will allocate all required infra resources automatically)
+
+Scalability:
+Based on amount of data we are going to upload with it will increase or decrease our infra resources in backend automatically.
+
+High availability:
+With out having any downtime (365 days, 24/7) we can access our GCS service across the globe
+
+Today ==> uploading my data from India into GCS service 
+1 wk ==> US ==> can I able to access the same data or not ? [YES]
+
+Integrate with other GCP services:
+
+GCS + Bigquery
+GCS + dataproc 
+GCS + pubsub
+
+in GCS if you want to store your data first we need to care one important thing? "CREATE  a  BUCKET"
+
+Laptop ==> you want to store 10GB data ==> prerequisite ?? [Harddisk + OS + Drives (C:/ D:/ E:/)]
+
+Bucket = Drive (indirectly)
+
+==> if you want to create a bucket on GCS service we need to take care of below things
+
+a) bucket name: your bucket name should be unique (across the globe)
+
+	bucket name: sample (error: this bucket name already in usage)
+	gmail id globally unique
+	
+b) storage classes: based on frequency of accessing the data in bucket we can define below storage classes 
+	Standard storage: if you want to access your files on daily basis [More money]
+	Nearline storage: if you want to access your files on monthly basis
+	Coldline storage: if you want to access your files on quarterly basis
+	Archive storage: if you want to access your files on yearly basis [Less Money]
+	
+c) Define in which location you want to store your data: 
+
+store the data ==> into my GCP 
+
+GCP cloud ==> you can get all the services over the internet ==> [ machines/servers/storage/database/dwh ] ==> in backend they will maintain all the machines and servers and storage physically ==> they will take 100 to 150 acrs of land ==> configure all infra resources in physical manner [DATA CENTRES]
+
+GCP cloud ==> data centre ==> India 
+	Because of some reason this data centre collapsed ==> GCP can not able to revert their customers data 
+	
+For this reason every cloud platform is going to maintain data centres across the globe ==> IN, US, SG, UK ....
+
+single region: in only one region your data would be available [Less money]
+dual region: in two regions your data would be available ==> High availability feature
+multi region: more than two regions your data would be available ==> Highest availability feature [more money]
+
+Note: in real time whatever very very very important data you are dealing in your projects for such kinf of files if you are creating a bucket then we can give it as multi region.
+
+d) we need to define how you want to control access on the bucket:
+
+		1) uniform: whenever you want to control access at bucket level
+		2) fine-grained: whenever you want to control access at object level
+
+
+
+scenario1:
+Bucket1:
+	file1 (user X - R+W)
+	file2 (user X - R+W)
+	folder1 (user X - R+W)
+	folder2 (user X - R+W)
+	
+To handle above scenario we need to give access at bucket level or object level ? [Bucket Level]
+
+scenario1:
+Bucket1: (user X - R+W)
+	file1 
+	file2 
+	folder1 
+	folder2 
+	
+scenario2:
+Bucket1:
+	file1 (user X - R)
+	file2 (user X - W)
+	folder1 (user X - R+W)
+	folder2 (user X - R)
+	
+To handle above scenario we need to give access at bucket level or object level ? [Object Level]
+
+scenario2:
+Bucket1:
+	file1 (user X - R)
+	file2 (user X - W)
+	folder1 (user X - R+W)
+	folder2 (user X - R)
+	
+e) Protection on top of our data: [tomorrows sessions]
+		Versioning 
+		Encryption algorithms
+		
+tomorrows sessions ==> practical manner 
