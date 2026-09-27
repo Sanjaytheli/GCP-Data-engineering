@@ -1,0 +1,224 @@
+Spark concepts / db concepts (aggregation/table level aggregation/column level aggregation)
+
+******************************************************************************************
+
+HOw we can able to implement all previous topics from project perspective
+
+Domain ==> retail domain project 
+
+customer
+salesman
+orders 
+
+customers ==> single country or multiple countries [multiple countries]
+salesman  ==> single country or multiple countries [multiple countries]
+
+customers ==> london 
+customers ==> singapore 
+customers ==> newyork
+customers ==> india 
+..
+..
+..
+
+salesman ==> london 
+salesman ==> singapore 
+salesman ==> newyork
+salesman ==> india 
+..
+..
+..
+
+whatever the data we are getting here just assume that we are getting all the data in json format ==> from our project we are going to consider below files 
+
+customer_lo.json  [london customers data]
+customer_ny.json  [newyork customers data]
+salesman_lo.json  [london salesman data]
+salesman_ny.json  [newyork salesman data]
+orders.json		[this file having orders from both london and newyork]
+
+==> biz person requirement is he want to analyze how to total amount we are getting from all the customers and all the salesman across all the cities.
+
+order amount ==> orders.json
+customers data ==> customer_lo.json, customer_ny.json
+salesman data ==> salesman_lo.json, salesman_ny.json
+
+indirectly in between all above files we need to perform merging operation ==> what kind of merging operation we need to perform ==> 
+
+order amount ==> orders.json
+customers data ==> customer_lo.json, customer_ny.json  [Merging operations ==> all the customers ==> vertical]
+salesman data ==> salesman_lo.json, salesman_ny.json   [Merging operations ==> all the salesman ==> vertical]
+
+vertical ==> union transformation
+
+customers (lo+ny)
+salesman (lo+ny)
+orders (lo+ny)
+
+
+(customers)		(salesman)		(customers)			(orders)
+customnername 	salesmanname	city 			total_purchase_amount
+
+customers (lo+ny)
+salesman (lo+ny)
+orders (lo+ny)
+
+==> in between all abve outputs we need to perform merging operation ==> [horizontal direction]
+
+horizontal ==> join transformation
+
+==> HOw we can able to perform all above activities ?? [data processing) (pyspark)
+
+prerequisites:
+
+Done - a) we need to have all our source files [gcs bucket or hdfs location] [gcs bucket]
+Done - b) we need to have dataproc cluster [spark framework]
+Done - c) we need to connect to our cluster by using putty shell
+
+to connect to the spark ==> pyspark 
+
+>>> spark dsl 
+>>> spark.sql 
+
+pyspark	
+		spark dsl 
+		spark sql 
+		
+to connect to the spark ==> spark-shell (scala/java) 
+to connect to the spark ==> spark-sql (sql queries)
+
+Today session ==> we will try to understand how we can able to perform all above activities by using spark-sql
+
+==> whatever we discussed so far I will represent this entire flow in diagrammatic format in exxcel sheet
+
+spark-sql:
+----------
+
+1. we need to create a database (this database need to take your storage operations)
+
+database ==> tables ==> rows+columns ==> data
+
+create database raw_db
+location 'gs://cdebatch5758sparkusecase/raw_db.db';
+
+2. connect to our database 
+
+use raw_db;
+
+3. 
+create or replace temporary view customer_lo_v
+using JSON
+options (
+path='gs://bucketname/source/customer_lo.json'
+)
+
+4. create a table by reading data from above view 
+create table raw_db.customer_lo
+using PARQUET
+select * from customer_lo_v
+
+
+
+gs://cdebatch5758sparkusecase/raw_db.db/customer_lo/dfasdfadsf.parquet
+
+df1=spark.read.format("json").load("gs://bucketname/source/customer_lo.json")
+df1.write.format("parquet").save("gs://bucketname/target/customer_lo/")
+
+***********************************************************************************
+spark-sql
+***********************************************************************************
+customer_lo flow:
+-----------------
+
+create database if not exists raw_db
+location 'gs://cdebatch5758sparkusecase/raw_db.db';
+
+use raw_db;
+
+create or replace temporary view customer_lo_v
+using JSON
+options (
+path='gs://cdebatch5758sparkusecase/source/customer_lo.json'
+);
+
+create table if not exists raw_db.customer_lo
+using PARQUET
+select * from customer_lo_v;
+
+*******************************************************************************
+customer_ny flow:
+----------------
+
+create database if not exists raw_db
+location 'gs://cdebatch5758sparkusecase/raw_db.db';
+
+use raw_db;
+
+create or replace temporary view customer_ny_v
+using JSON
+options (
+path='gs://cdebatch5758sparkusecase/source/customer_ny.json'
+);
+
+create table if not exists raw_db.customer_ny
+using PARQUET
+select * from customer_ny_v;
+
+*******************************************************************************
+salesman_lo flow:
+----------------
+
+create database if not exists raw_db
+location 'gs://cdebatch5758sparkusecase/raw_db.db';
+
+use raw_db;
+
+create or replace temporary view salesman_lo_v
+using JSON
+options (
+path='gs://cdebatch5758sparkusecase/source/salesman_lo.json'
+);
+
+create table if not exists raw_db.salesman_lo
+using PARQUET
+select * from salesman_lo_v;
+
+*******************************************************************************
+salesman_ny flow:
+----------------
+
+create database if not exists raw_db
+location 'gs://cdebatch5758sparkusecase/raw_db.db';
+
+use raw_db;
+
+create or replace temporary view salesman_ny_v
+using JSON
+options (
+path='gs://cdebatch5758sparkusecase/source/salesman_ny.json'
+);
+
+create table if not exists raw_db.salesman_ny
+using PARQUET
+select * from salesman_ny_v;
+
+*******************************************************************************
+orders flow:
+----------------
+
+create database if not exists raw_db
+location 'gs://cdebatch5758sparkusecase/raw_db.db';
+
+use raw_db;
+
+create or replace temporary view orders_v
+using JSON
+options (
+path='gs://cdebatch5758sparkusecase/source/orders.json'
+);
+
+create table if not exists raw_db.orders
+using PARQUET
+select * from orders_v;
+
+*******************************************************************************
