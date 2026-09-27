@@ -1,0 +1,237 @@
+project execution ==> spark-sql approach 
+
+************************************************
+
+$spark-sql
+spark-sql> queries 
+
+==> directly from unix prompt($) only we can able to trigger our sql queries if you want, for this we can use below commands 
+
+to trigger sql queries ==> $spark-sql -e "query"
+
+==> we can keep all our queries into a script file (.sql) and we can trigger this script file directly from our unix prompt.
+						   $spark-sql -f "script path"
+						   
+==> from our project side total how many number of scripts we need to create ?? [7]
+
+*********************************************************
+mkdir scripts
+cd scripts 
+cat > filename ==> copy paste sql queries ==> ctrl+d
+*********************************************************
+
+drop flow:  (drop.sql)
+-----------
+drop database if exists raw_db cascade;
+drop database if exists processed_db cascade;
+
+***********************************************************************************
+customer_lo flow:  (customer_lo.sql)
+-----------------
+
+create database if not exists raw_db
+location 'gs://cdebatch5758sparkusecase/raw_db.db';
+
+use raw_db;
+
+create or replace temporary view customer_lo_v
+using JSON
+options (
+path='gs://cdebatch5758sparkusecase/source/customer_lo.json'
+);
+
+create table if not exists raw_db.customer_lo
+using PARQUET
+select * from customer_lo_v;
+
+*******************************************************************************
+customer_ny flow:  (customer_ny.sql)
+----------------
+
+create database if not exists raw_db
+location 'gs://cdebatch5758sparkusecase/raw_db.db';
+
+use raw_db;
+
+create or replace temporary view customer_ny_v
+using JSON
+options (
+path='gs://cdebatch5758sparkusecase/source/customer_ny.json'
+);
+
+create table if not exists raw_db.customer_ny
+using PARQUET
+select * from customer_ny_v;
+
+*******************************************************************************
+salesman_lo flow:  (salesman_lo.sql)
+----------------
+
+create database if not exists raw_db
+location 'gs://cdebatch5758sparkusecase/raw_db.db';
+
+use raw_db;
+
+create or replace temporary view salesman_lo_v
+using JSON
+options (
+path='gs://cdebatch5758sparkusecase/source/salesman_lo.json'
+);
+
+create table if not exists raw_db.salesman_lo
+using PARQUET
+select * from salesman_lo_v;
+
+*******************************************************************************
+salesman_ny flow:  (salesman_ny.sql)
+----------------
+
+create database if not exists raw_db
+location 'gs://cdebatch5758sparkusecase/raw_db.db';
+
+use raw_db;
+
+create or replace temporary view salesman_ny_v
+using JSON
+options (
+path='gs://cdebatch5758sparkusecase/source/salesman_ny.json'
+);
+
+create table if not exists raw_db.salesman_ny
+using PARQUET
+select * from salesman_ny_v;
+
+*******************************************************************************
+orders flow:  (orders.sql)
+----------------
+
+create database if not exists raw_db
+location 'gs://cdebatch5758sparkusecase/raw_db.db';
+
+use raw_db;
+
+create or replace temporary view orders_v
+using JSON
+options (
+path='gs://cdebatch5758sparkusecase/source/orders.json'
+);
+
+create table if not exists raw_db.orders
+using PARQUET
+select * from orders_v;
+
+*******************************************************************************
+
+Retail_Summary Flow: (Retail_Summary.sql)
+--------------
+
+create database if not exists processed_db
+location 'gs://cdebatch5758sparkusecase/processed.db';
+
+use processed_db;
+
+create table if not exists processed_db.Retail_Summary
+(
+name string,
+city string,
+Tot_Purchase_Amnt decimal(10,2)
+)using PARQUET;
+
+insert into processed_db.Retail_Summary
+select sales.name,cust.city,coalesce(sum(ord.purch_amt),0) as Tot_Purchase_Amnt from
+(select * from raw_db.customer_lo union select * from raw_db.customer_ny)cust
+join (select * from raw_db.orders)ord
+on cust.customer_id=ord.customer_id
+join (select * from raw_db.salesman_lo union select * from raw_db.salesman_ny)sales
+on sales.salesman_id=ord.salesman_id
+group by sales.name,cust.city;
+*************************************************************************
+
+==> after creation of all the script file better copy all these script files into our gcs bucket 
+
+$gsutil cp /home/sample/scripts/*.* gs://cdebatch5758sparkusecase/scripts/
+
+spark-sql -f "/home/sample/scripts/drop.sql"
+
+spark-sql -f "gs://cdebatch5758sparkusecase/scripts/drop.sql"
+spark-sql -f "gs://cdebatch5758sparkusecase/scripts/customer_lo.sql"
+spark-sql -f "gs://cdebatch5758sparkusecase/scripts/customer_ny.sql"
+spark-sql -f "gs://cdebatch5758sparkusecase/scripts/orders.sql"
+spark-sql -f "gs://cdebatch5758sparkusecase/scripts/salesman_lo.sql"
+spark-sql -f "gs://cdebatch5758sparkusecase/scripts/salesman_ny.sql"
+spark-sql -f "gs://cdebatch5758sparkusecase/scripts/Retail_Summary.sql"
+
+*************************************************************************
+
+==> in your project you are having total 100 files, for all these files read data from json and convert it into parquet then create the table ==> then how many script files we need to create (100 .sql files)
+
+==> creation of these many number of files it will take time and also in future if you want to change your bucket name then in how many files we need to take change in 100 .sql files (maintenance activities will become difficult) ==> to overcome these issues in real time we are going to use "Parameterized approach"
+
+customer_lo flow:  {general approach}
+------------
+create database if not exists raw_db
+location 'gs://cdebatch5758sparkusecase/raw_db.db';
+
+use raw_db;
+
+create or replace temporary view customer_lo_v
+using JSON
+options (
+path='gs://cdebatch5758sparkusecase/source/customer_lo.json'
+);
+
+create table if not exists raw_db.customer_lo
+using PARQUET
+select * from customer_lo_v;
+
+parameter1=bucket_name (cdebatch5758sparkusecase)
+parameter2=table_name (customer_lo)
+
+customer_lo flow:  {Parameterized approach} {common.sql}
+------------
+create database if not exists raw_db
+location 'gs://${bucket_name}/raw_db.db';
+
+use raw_db;
+
+create or replace temporary view ${table_name}_v
+using JSON
+options (
+path='gs://${bucket_name}/source/${table_name}.json'
+);
+
+create table if not exists raw_db.${table_name}
+using PARQUET
+select * from ${table_name}_v;
+
+****************************************************************************
+spark-sql -f "gs://cdebatch5758sparkusecase/scripts/common.sql" -d bucket_name=cdebatch5758sparkusecase -d table_name=customer_lo
+
+==> if you are going to follow scripting approach in our class for our project total how many scripts we need to create ? [3] [drop.sql, common.sql , Retail_Summary.sql]
+
+==> if we are going to follow parameterization approach how many commands we need to trigger to complete our project execution ?
+
+spark-sql -f "gs://cdebatch5758sparkusecase/scripts/drop.sql"
+spark-sql -f "gs://cdebatch5758sparkusecase/scripts/common.sql" -d bucket_name=cdebatch5758sparkusecase -d table_name=customer_lo
+spark-sql -f "gs://cdebatch5758sparkusecase/scripts/common.sql" -d bucket_name=cdebatch5758sparkusecase -d table_name=customer_ny
+spark-sql -f "gs://cdebatch5758sparkusecase/scripts/common.sql" -d bucket_name=cdebatch5758sparkusecase -d table_name=salesman_lo
+spark-sql -f "gs://cdebatch5758sparkusecase/scripts/common.sql" -d bucket_name=cdebatch5758sparkusecase -d table_name=salesman_ny
+spark-sql -f "gs://cdebatch5758sparkusecase/scripts/common.sql" -d bucket_name=cdebatch5758sparkusecase -d table_name=orders
+spark-sql -f "gs://cdebatch5758sparkusecase/scripts/Retail_Summary.sql"
+
+********************************************************************************************
+
+step1 ==> individual queries 
+step2 ==> how to trigger script files
+step3 ==> script files how to apply parameterization
+step4 ==> automate all these scripts execution [tomorrow session]
+
+in real time our project execution will happen only one time or on daily basis ?? [Daily basis]
+
+==> every day are we going to run all above script manually ? [NO] [Automate the process] [Dataproc jobs + dataproc workflows]
+
+composer(Airflow)
+********************************************************************************************
+
+status of assignments: 
+	I received mails from 13 members [ I will explain spark dsl + spark.sql ]
