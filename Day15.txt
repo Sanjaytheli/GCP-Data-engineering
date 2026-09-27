@@ -1,0 +1,92 @@
+spark concepts + db concepts 
+
+different examples ==> 
+		sql query
+		spark dsl operations
+		spark sql operations
+		
+***********************************************
+
+
+==> read data from customer_lo.json file, after that I want to get total grade as a result.
+
+spark dsl:
+
+from pyspark.sql.functions import sum
+customer_lo_df=spark.read.format("json").load("gs://cdebatch5758sparkusecase/source/customer_lo.json")
+customer_lo_df.agg(sum("grade").alias("tot_grade")).show()
+
+spark sql:
+
+customer_lo_df=spark.read.format("json").load("gs://cdebatch5758sparkusecase/source/customer_lo.json")
+customer_lo_df.createOrReplaceTempView("customer_lo_v")
+spark.sql("select sum(grade) as tot_grade from customer_lo_v").show()
+
+==> read data from customer_lo.json file, after that I want to get total grade as a result for every salesman id.
+
+spark dsl:
+from pyspark.sql.functions import sum
+customer_lo_df=spark.read.format("json").load("gs://cdebatch5758sparkusecase/source/customer_lo.json")
+customer_lo_df.groupBy("salesman_id").agg(sum("grade").alias("tot_grade")).show()
+
+spark sql:
+
+customer_lo_df=spark.read.format("json").load("gs://cdebatch5758sparkusecase/source/customer_lo.json")
+customer_lo_df.createOrReplaceTempView("customer_lo_v")
+spark.sql("select salesman_id,sum(grade) as tot_grade from customer_lo_v group by salesman_id").show()
+
+********************************************************************************
+
+previous session ==> join 
+
+==> read data from customer_lo.json file 
+==> read data from orders.json file 
+==> I want to merge data between above two files in horizontal direction 
+
+
+spark dsl:
+----------
+customer_lo_df=spark.read.format("json").load("gs://cdebatch5758sparkusecase/source/customer_lo.json")
+orders_df=spark.read.format("json").load("gs://cdebatch5758sparkusecase/source/orders.json")
+customer_lo_df.join(orders_df,on="customer_id",how="inner").select("city","ord_no","purch_amt").show()
+
+customer_lo_df.join(orders_df,on="customer_id",how="inner").select(customer_lo_df.city,orders_df.ord_no,orders_df.purch_amt).show()
+
+df1 ==> id1
+df2 ==> id2
+
+customer_id and salesman_id ==> join condition 
+
+customer_lo_df.join(orders_df,customer_lo_df.customer_id==orders_df.customer_id,how="inner").select("city","ord_no","purch_amt").show()
+
+spark sql:
+----------
+
+customer_lo_df=spark.read.format("json").load("gs://cdebatch5758sparkusecase/source/customer_lo.json")
+orders_df=spark.read.format("json").load("gs://cdebatch5758sparkusecase/source/orders.json")
+customer_lo_df.createOrReplaceTempView("customer_lo_v")
+orders_df.createOrReplaceTempView("orders_v")
+spark.sql("select c.city,o.ord_no,o.purch_amt,o.salesman_id from customer_lo_v c \
+join orders_v o \
+on c.customer_id=o.customer_id").show() \
+
+***************************************************************************************
+dataproc service:
+
+spark concepts 
+db concepts 
+
+sql queries in our classes [same topics whether we covered in our sql videos or not]
+
+please go through one sql + one python video on daily basis 
+
+in our classes we are going to repeate same sql topics two time 
+
+batch57 ==> 
+batch58 ==> after 20 days 
+
+bigquery ==> sql concepts 
+
+LMS portal ==> Database assignments + python assignments [please complete all these assignments] ==> I given answers for all these assignments also in LMS Portal 
+
+***************************************************************************************
