@@ -1,0 +1,80 @@
+Project execution ==> spark-sql ==> scripting approach / parameterizeation approach
+
+************************************************************************
+
+spark-sql -f "gs://cdebatch5758sparkusecase/scripts/drop.sql"
+spark-sql -f "gs://cdebatch5758sparkusecase/scripts/customer_lo.sql"
+spark-sql -f "gs://cdebatch5758sparkusecase/scripts/customer_ny.sql"
+spark-sql -f "gs://cdebatch5758sparkusecase/scripts/orders.sql"
+spark-sql -f "gs://cdebatch5758sparkusecase/scripts/salesman_lo.sql"
+spark-sql -f "gs://cdebatch5758sparkusecase/scripts/salesman_ny.sql"
+spark-sql -f "gs://cdebatch5758sparkusecase/scripts/Retail_Summary.sql"
+
+drop
+drop ==> customer_lo
+drop ==> customer_ny
+drop ==> orders
+drop ==> salesman_lo
+drop ==> salesman_ny
+customer_lo,customer_ny,orders,salesman_lo,salesman_ny ==>  Retail_Summary
+
+==> Here we need to provide dependency between each and every script or not ? [How?]
+==> I want to trigger all above script in automated manner?
+
+Your source team sending the files every day morning at 7:30AM ==> then we need to trigger our scripts at 7:30AM ==> [manually ==> evey day 7:30AM we need to login and we need to connect to cluster and we need to trigger one by one script manually] ==> instead of doing these activities manually I want to trigger scripts in automated manner + I want to define dependencies as per my requirement
+
+To take care of above activities in Dataproc we are having 
+
+a) jobs ==> if you want to trigger single job by using single script
+b) workflow ==> if you want to trigger multiple scripts by having dependencies 
+
+
+I want to delete my raw_db database 
+option1: go to spark-sql> drop database databasename cascade;
+option2: from unix prompt $spark-sql -e "drop database databasename cascade;"
+option3: from unix prompt $spark-sql -f "dropscriptpath"
+option4: by using our dataproc jobs also we can able to perform this operation
+
+go to dataproc console ==> left side ==> click on jobs ==> click submit job ==> fill all basic details ==> click on submit button 
+
+go to dataproc console ==> left side ==> click on workflows ==> click on create workflow template ==> 
+
+lable: 
+goog-dataproc-cluster-name:cdebatch2
+
+==> after completion of drop job it will trigger next 5 jobs at a time ==> all these 5 jobs are going to run in parallel
+Note: whatever cluster we created this is single node cluster , if you are going to trigger multiple jobs in parallel it will create resources issues ==> you will get errors
+
+To avoid this kind of error ==> better to take care of your jobs execution in sequential manner
+
+Note: tomorrow I want to trigger my complete project execution , just we need to click on Run button of our workflow. with that it will run all our jobs which are related to our project.
+
+every day morning at 7:30AM who will click on this run button ==> to automate this part indirectly we need to schedule our workflow ==> in dataproc service we are not having option to schedule the jobs or workflows , to take care of scheduling we are going to use "composer (airflow)" service.
+
+composer service: (after few days) 
+	a) we can create the jobs 
+	b) define dependencies
+	c) scheduling operations 
+	
+*********************************************************************
+
+dataproc jobs (to trigger only single job as per your requirement)
+dataproc workflows (to trigger multiple jobs with dependencies)
+
+prerequisites:
+
+1. scripts (.sql files) should be available in your gcs bucket
+2. cluster should be ready (running state)
+3. source files should be available in your gcs bucket 
+
+*********************************************************************
+
+dataproc jobs + dataproc workflows [spark-sql approach]
+dataproc jobs + dataproc workflows [spark dsl approach]
+dataproc jobs + dataproc workflows [spark.sql approach]
+
+spark dsl & spark.sql ==> in previous classes we taken care of this execution by using individual lines of the code (pyspark) ==> here also we can able to follow scripting approach , after that we can trigger this script file from unix prompt or dataproc jobs or dataproc workflows [tomorrows session]
+
+spark dsl & spark.sql ==> to create script file what would be the extension ==> .py
+
+********************************************************************
