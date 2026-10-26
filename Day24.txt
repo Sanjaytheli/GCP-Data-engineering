@@ -1,0 +1,150 @@
+How to deal with nested json / how to handle csv files / how to handle error records (databricks)
+
+***************************************************************************************
+
+Automate / Scheduling all our jobs execution 
+
+dataproc workflows / jobs ==> how to create jobs + how to define dependencies ==> dataproc workflow we dont have option to schedule the jobs/workflows ==> here we can use other GCP service called as Composer (Airflow) service
+
+Composer ==> Managed AIrflow service 
+
+Dataproc ==> Managed Spark
+
+Composer [Managed airflow] service:
+-----------------------------------
+Cloud composer is a google managed airflow service which we are using for the purpose of workflow orchestration and workflow scheduling activities
+
+Composer ==> create environment ==> by default we are going to get Airflow framework ==> orchestration / scheduling activities
+
+Dataproc ==> create cluster ==> By default we are going to get Hadoop / Spark framework ==> data processing activities 
+
+scheduling activities:
+
+create the jobs:
+Job1
+Job2
+Job3
+Job4
+Job5 
+
+dependencies:
+Job1 ==> Job2
+Job2 ==> Job3
+Job3 ==> Job4
+Job4 ==> Job5
+
+Execution:
+	I want to trigger all above jobs every day at 8:30AM [Daily Jobs]
+	I want to trigger all above jobs every day at 9:30AM [Daily Jobs]
+	I want to trigger all above jobs every Monday at 9:30AM [Weekly Jobs]
+	I want to trigger all above jobs every January on every monday at 10:30AM [yearly Jobs]
+	I want to trigger all above jobs only ON Monday and Wednesday and Friday day at 9:30AM
+	I want to trigger all above jobs every day  at 9:30AM except Saturday and SUndays
+	I want to trigger all above jobs for every 10 mins
+	
+Scheduling activities 
+	==> to take care of all above scheduling activities we can able to use our Airflow framework
+	==> by using Airflow we can create our tasks (jobs)
+	==> by using airflow we can able to define the dependencies in between the tasks
+	
+orchestration:
+--------------
+If you are going to take care any activities end to end those activities we can call it as orchestration activities
+
+Project: 
+	Read the data from the files ==> we applied our business requirement ==> finally we loaded data into our target system [Orchestration]
+	
+==> By using airflow we can able to perform all above orchestration related activities
+
+AIrflow ==> read data from the files + data processing + load the data int our target system [wrong statement]
+
+
+Read the data from the files ==> we applied our business requirement ==> finally we loaded data into our target system ==> [Spark]
+
+AIrflow ==> read data from the files + data processing + load the data int our target system [Right statement] ==> if you are going to integrate AIrflow with dataproc service 
+
+Airflow + dataproc 
+Airflow + GCS service 
+Airflow + Bigquery 
+Airflow + Pub/sub
+..
+..
+
+source bucket ==> source team informed every day at 10:30AM we will send files to source bucket ==> then we need to copy all the files into our target bucket ==> data processing operations
+
+10:30AM  ==> source team send the files to your source bucket
+
+gsutil cp sourcebucketpath targetbucketpath [daily basis at 10:30AM] ==> automate this process + scheduling this process ==> Airflow 
+
+Airflow + GCS (integrate)
+
+create jobs + dependencies + trigger all these jobs + scheduling operations ==> Airflow 
+
+Airflow + dataproc service 
+
+==> to integrate airflow with different services we are going to use Airflow operators (GCS operators, dataproc operators, bigquery operators..)
+
+whatever Airflow framework we are having in GCP composer services ==> same airflow is going to be available in other cloud platforms also 
+
+Spark cluster ==> GCP  (dataproc)
+		      ==> AWS  (EMR)
+			  ==> Azure (HDSight)
+			  
+Airflow ==> this we can access on GCP + AWS + Azure 
+
+Databricks ==> this also we can access GCP + AWS + Azure
+
+**********************************************************************
+
+==> I will show you how to create composer environment (airflow framework) ==> 8 to 10 mins 
+
+a) open gcp console 
+b) then go to composer service  [if you open composer service ==> enable api ==> click on that wait for few seconds]
+c) just we need to click on create environment [click on managed airflow gen3]
+		==> pass basic inputs ==> create 
+		
+	name: cdebatch
+	service account: projectnumber-compute@developer.....
+	select high resiliency mode
+	select allow all IP addresses
+	
+	create button ==> wait for 8 to 10 mins of time 
+	
+***************************************************************************
+Airflow Architecture:
+---------------------
+
+What all are the components which are available in airflow:
+
+1. DAG:
+		- In airflow to do any kind of activities first step we need to crate a DAG (Direct acyclic graph)
+		- with in DAG we are going to define our tasks and task definitions and task dependencies and task schedule
+		- while creation of the dag we are going to create a python script file (.py)
+		- we need to save all these dag files into "dags folder" [this folder will create into a bucket, this bucket and folder will create automatically while creation of composer environment]
+		
+2. Scheduler:
+		with in dag we are defining dependencies/schedules by depending on our requirement ==> scheduler component will take care of all tasks execution based on schedules which we defined in our dag file.
+		
+3. worker nodes: [virtual machines]
+		whatever tasks you defined with in dag file those tasks are going to trigger on top of these worker node [python script]
+		
+4. Executor:
+		to execute all your tasks based on dependencies and based on schedules it will use Executor component.
+		
+5. WebUI: (web user interface)
+		By using this component we can able to see what is the status of each and every dag / monitor how many dags are running / monitor how many dags are succeeded and how many dags are failed and how many dags are in progress / we can able to see log information of every dag 
+		
+6. webServer: By usig this webserver component only above WebUI will work
+
+7. Metadata Database: In this database it will store our task name, schedules information , dag details , data status details..etc
+
+metadata ==> data about the data 
+Metadata Database ==> data about the dags (task, dependencies, schedule, status, execution details..etc)
+
+*******************************************************************************
+
+By this time if composer environment created ==> I though to show this GCS bucket 
+
+note: if you created your composer environment successfully very good, if you are getting any error (in my account I got error, new error)
+
+*******************************************************************************
