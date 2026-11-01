@@ -1,0 +1,116 @@
+
+Composer (Managed airflow)
+	- what is airflow
+	- purpose of airflow 
+	- components which are available in airflow 
+	- airflow architecture 
+		- dag
+		- scheduler 
+		- executor
+		- webUI
+		- webserver
+		- metadata database
+	- composer environment
+	
+***************************************************************************
+
+==> how we can able to build a dag ? 
+		dag ==> [Python script] ==> tasks, task definition, dependency, schedule information
+		
+==> Requirement: I want to trigger 3 different unix commands, for this I want to create 3 different tasks.
+
+	Task1 ==> echo hello1
+	Task2 ==> echo hello2
+	Task3 ==> date
+	
+	Task1 >> Task2 >> Task3
+	
+	to trigger unix commands by using airflow we are going to use "BASH OPERATOR"
+	
+	To create dag file (python script) we need to follow below steps with in our dag file 
+	
+	step1: we need to import all our required libraries
+	step2: we need to create our dag object, in this dag object we are going to provide all our variable, arguments
+	step3: we need to define tasks with task definition
+	step4: we need to define task dependency
+
+Python script file (sample.py):
+--------------------------------
+step1: we need to import all our required libraries
+		from XXXXXX import XXXXX
+		
+		from airflow.operators.bash import BashOperator
+		from airflow import models
+
+step2: we need to create our dag object, in this dag object we are going to provide all our variable, arguments
+
+with models.DAG(
+'firstDag', ==> this is the name you can able to see in our airflow console
+default_args={ ==> in this dict whatever arguments we are going to define it would be applicable for every task
+'depends_on_past': True/False, [default False]
+'retries':5,
+'retry_delay': timedelta(minutes=1),
+'email':['srinivasqt@gmail.com'],
+'email_on_failure': True/False, [default False]
+'email_on_retry': True/False [default False]
+},
+description='this is the first dag for understanding',
+schedule_interval=timedelta(days=1), ==> every day your dag will trigger at 00:00AM
+									 ==> to define particular time intervals we need to use cron expression
+start_date=datetime(2026,01,01),
+catchup=True/False,
+) as dag:
+
+
+depends_on_past :
+	Today you created dag ==> July 28th ==> 8:30AM ==> succeeded
+							  July 29th ==> 8:30AM ==> Failed
+							  July 30th ==> 8:30AM ==> triggered ==> dag will run or it will wait for completion previous day run (depends_on_past)
+
+depends_on_past=True ==> it will verify status of my previous run , if it is succeeded then only it will take care of current run.
+depends_on_past=False ==> it will not verify status of my previous run 
+
+
+schedule_interval=timedelta(days=1), 
+	I created my dag on July 28th ==> this dag will trigger immediately for today 
+	But here my requirement is I want to trigger my dag from Jan 1st 2026 onwards , to handle this kind of requirement we need to use start_date and catch_up arguments
+	catchup=false ==> that dag will run from today onwards
+	cathup=True ==> that dag will run based on start_date  [Backfilling activity]
+
+step3: we need to define tasks with task definition
+
+t1=BashOperator(
+task_id='echo1', ==> this task id we can able to see in our airflow console
+bash_command='echo hello1'
+)
+
+t2=BashOperator(
+task_id='echo2', ==> this task id we can able to see in our airflow console
+bash_command='echo hello2'
+)
+
+t3=BashOperator(
+task_id='date', ==> this task id we can able to see in our airflow console
+bash_command='date'
+)
+
+step4: we need to define task dependency
+
+t1 >> t2 >> t3 
+
+t3 << t2 << t1
+
+*************************************************************************************
+
+==> once your dag file is ready then we need to keep our dag file in to our dags folder
+==> after that just wait for 30 to 40 seconds, with that it will sync bucket content to your web ui ==> after that it will display our dag in airflow console 
+
+*************************************************************************************
+
+Note: if you can able to understand todays session with that only you can able to understand our next 4 5 classes
+
+*************************************************************************************
+
+Note: After completion of practice on airflow examples, please delete your composer environment (per day it will charge around 1000 to 1100rs from free credits)
+
+*************************************************************************************
