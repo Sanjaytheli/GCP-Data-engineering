@@ -1,0 +1,146 @@
+Airflow variables + integration airflow with dataproc operators + project execution by using airflow 
+
+******************************************************************************************************
+
+==> in all our previous airflow example we are defining dependencies as per our requirement ==> but we are defining dependencies with in the dag for the tasks which are available
+
+==> in real time we are going to face some scenarios in those scenarios we need to define cross dag dependency
+
+Dag1.py (parent dag)
+	t1
+	t2
+	t3
+	
+t1 >> t2 >> t3 
+
+Dag2.py (child dag)
+	t4
+	t5
+	t6
+	
+t4,t2 >> t5 >> t6
+	
+After completion of t4 and after completion of t2 in dag1 then only I want to trigger my t5 in dag2. ==> cross dag dependency
+
+==> to handle this kind of cross dag dependency we are going to user "EXTERANLTASKSENSSOR" operator.
+
+Dag2.py
+	t4
+	t100
+	t5
+	t6
+	
+t4 >> t5 >> t6
+
+t100=EXTERANLTASKSENSSOR(
+task_id="waitforparenttask",
+external_dag_id="dag1",
+external_task_id="t2",
+poke_internal=60,
+timeout=600
+)
+
+t4 >> t100 >> t5 >> t6 
+
+***************************************************************************
+
+dag4 ==> [parent]
+	start_task >> gcs_object_sensor_task >> createNewBucket >> copy_files >> end_task
+	
+dag3 ==> [child]
+	drop >> customer_lo >> customer_ny >> salesman_lo >> salesman_ny >> orders >> result_summary
+	
+Assignment: Combine both dag3 and dag4 into single dag 
+
+dag100:
+start_task >> gcs_object_sensor_task >> createNewBucket >> copy_files >> drop >> customer_lo >> customer_ny >> salesman_lo >> salesman_ny >> orders >> result_summary >> end_task
+
+==> if you notice in this assignment indirectly can we apply our cross dag dependency or not ?? [yes]
+
+==> in above example after completion of end_task in dag4 then I want to trigger drop task in dag3 (instead of doing merging)
+
+ste1p: in which dag we need to create one extra task [dag3]
+
+wait_task=externaltasksensor(
+task_id="wait",
+external_dag_id="dag4",
+external_task_id="end_task",
+poke_internal=60,
+timeout=300
+)
+step2: in dag3 we need to modify dependencies as below 
+
+wait_task >> drop >> customer_lo >> customer_ny >> salesman_lo >> salesman_ny >> orders >> result_summary
+
+Note: in real time projects instead of keeping all the tasks into single dag we are going to have different dags and we can define cross dag dependencies as per our requirement.
+
+**************************************************************************
+
+PythonOperator ==> in our dag file if you want to trigger user defined python functions then we can use PythonOperator.
+
+def add(a,b):
+	c=a+b
+	return c
+	
+t1=PythonOperator(
+task_id="pythonfunction",
+callable_function=add
+)
+
+**************************************************************************
+
+Assignment: Replicate this cross dag dependency on top of our project end to end execution perspective
+
+**************************************************************************
+
+==> so far in all our examples we are defining dag ==> with in the dag we are defining our dag object ==> in same dag file can we create different dag objects ?? [YES]
+
+dag10.py:
+
+with models.DAG(
+    "dummySensorGCSOpertorsVariable1",
+    default_args=default_args,
+    # The interval with which to schedule the DAG
+    schedule_interval=datetime.timedelta(days=1), 
+) as dag1:
+
+with models.DAG(
+    "dummySensorGCSOpertorsVariable2",
+    default_args=default_args,
+    # The interval with which to schedule the DAG
+    schedule_interval=datetime.timedelta(days=1), 
+) as dag2:
+
+t1=bashOperator(
+task_id="t1",
+bash_command="",
+dag=dag1
+)
+
+t2=bashOperator(
+task_id="t1",
+bash_command="",
+dag=dag2
+)
+
+t3=bashOperator(
+task_id="t1",
+bash_command="",
+dag=dag2
+)
+
+t4=bashOperator(
+task_id="t1",
+bash_command="",
+dag=dag1
+)
+
+t5=bashOperator(
+task_id="t1",
+bash_command="",
+dag=dag1
+)
+
+==> now if I am going to upload above dag file into dags folder ==> in airflow console how many dags I can able to see ==> it will display multiple dags (#2) in airflow console.
+
+***************************************************************************************
