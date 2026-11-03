@@ -1,0 +1,125 @@
+Airflow dag ==> what all are the sections we need to maintain ==> bash operator ==> upload dag files into dags folder ==> monitor dags in airflow console ==> how to verify the logs
+
+******************************************************************************************
+
+Real time scenario:
+
+==> dataproc we discussed about project ==> we are using json files as source ==> in real time who will share these files to you ==> source team 
+
+==> source team sending all the files to your source bucket (source team) ==> whatever the files we are getting into source bucket on top of that we need to create a target bucket and in that target bucket I want to copy all the files ==> after that I need to take care of all my data processing operations
+
+==> our source team sending the files daily at 8:30AM ==> (Daily)
+			a) create a bucket (Daily)
+					gsutil mb gs://targetbucketname
+			b) we need to copy the files in to our bucket (Daily)
+					gsutil cp sourcebucketpath targetbucketpath
+					
+			To run these commands every day we need to login at 8:30AM ==> open cloud sdk shell ==> we need to run above commands ==> can we do these activities manually on daily basis (it will create problems in real time projects) ==> for that reason we need to automate above activities + schedule above activities (airflow)
+			
+==> airflow ==> we are going to define the tasks and in these tasks we are going to use "GCS Operators"
+
+schedule=8:30AM
+
+t0 ==> scan source bucket 
+t1 ==> create bucket 
+t2 ==> to copy the files 
+
+t1 >> t2
+
+==> we need to ensure whether we received the files into our source bucket or not 
+==> we need to ensure whether we received the all the files into our source bucket or not
+
+as part of your project you need to get total 5 files into your source bucket ==> [all the files]
+
+8:30AM ==> source team sent only 2 files ==> 8:30 dag triggered ==> create the bucket + copy the files [2]
+
+==> to take care of above activities in real time with source team we are going to have some SLA's (Service level agreement) ==> we need to get confirmation from source team by when they can able to send all the files to source bucket on daily basis [8:30AM to 8:35AM we will send the files]
+
+==> with source team we are going to have one more agreement ==> we are going to request after sending all the project files at the end send one more file with name as "dummy_20260729.csv" file.
+
+==> in your source bucket you received this dummy.csv file , with that we can confirm that we received all the files.
+
+==> with above agreement we need to monitor whether we received the files into our source bucket
+		gsutil ls sourcebucketname [manually]
+		
+==> here we nee to monitor/scan our source bucket to verify whether we received files or not in automated manner ==> to do this activity in airflow we are having "sensor operator"
+
+t0=sensorOperator(
+task_id='scanbucket',
+bucket='sourceBucket',
+object='dummy_20260729.csv',
+poke_interval=10, [seconds]
+timeout=300 [seconds]
+)
+
+this task will trigger at 8:30AM ==> at 8:30AM this file not received ==> we need to wait for file availability ==> same task we need to rerun after some time ==> 
+
+after 8:35AM if your t0 is going to fail ==> then what we need to do ? [contact our source team]
+
+==> in real time we are having "support team" [24 X 7 basis] ==> they are going to monitor all the dags are running properly or not 
+
+**********************************************************************
+
+T0 ==> to do file scanning operations [GCS sesnsor operator] [projectid] [region]
+T1 ==> create the bucket {Gcs Create Operator] [projectid] [region]
+T2 ==> copy the files [GCS to GCS operator] [projectid] [region]
+
+T0 >> T1 >> T2 
+
+
+default_args={
+'projectid':'',
+'region':''
+}
+**********************************************************************
+
+dummy_20260729.csv ==> today it will scan this file availability
+dummy_20260730.csv 
+dummy_20260731.csv
+
+every day my task need to scan different file availability ==> to do this operation we should not give file name in hardcoded manner ==> to handle this we need to pass file name in dynamic manner ==> how to pass file name in dynamic manner ??
+
+object='dummy_20260729.csv',
+
+prefix='dummy_",
+suffix='.csv',
+date=today()
+objectname=prefix+date+suffix
+
+object=objectname
+
+==> we need to keep above lines of the code with in our dag file
+**********************************************************************
+
+How your dag can able to understand in which project it need to create the bucket + in which project it need to copy the files ==> for this we need to add projectid and region into default arguments
+
+**********************************************************************
+
+I want to display two more task names in airflow console ==> start and End ==> indirectly by using these tasks I dont want to perform any operation 
+
+Dummy Operator: If you want to display a task name in airflow console with out doing any kind of operations then we can use dummy operator.
+
+start ==> T0 ==> T1 ==> T2 ==> End
+
+**********************************************************************
+
+1. in our dag as per above discussion how many tasks we need to create ==> 5
+2. in dag what operators we need to import ==> sensor operator + gcscreatebucketoperator+gcstogcsoperator+dummyoperator
+3. we need to define default_args [projectid,region]
+
+step1: import required libraries
+step2: create dag object by using all requirement arguments
+step3: create the task [5]
+step4: define the dependency
+
+**********************************************************************
+Prerequisites:
+
+1. create source bucket 
+2. in this bucket maintain your source files 
+
+suggestion: if you want use your project bucket 
+
+3. in dag file change bucket names and project ids
+4. upload dummy.csv file into source bucket 
+**********************************************************************
