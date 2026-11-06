@@ -1,0 +1,61 @@
+what is bigquery
+what is the purpose of bigquery 
+features of bigquery 
+bigquery console (to create our tables)
+
+******************************************************
+
+Bigquery:
+	- how to create database 
+	- how to create tables 
+	- how to insert data into those tables 
+	
+Bigquery console ==> by using sql queries
+
+Bigquery console ==> console options 
+
+go to bigquery console ==> left side we can create our database by using console options 
+
+
+Table types (Native table & external table) ==> upcoming classes 
+Partitioning and clustering ==> upcoming classes
+
+==> you want to insert 1L records which are available in a file ==> instead of writing insert queries directly we can able to load data from the file to bigquery table
+
+your file is available in your local system ==> UPLOAD
+
+==> you are having your file in GCS bucket ==> from here you want to load data into your table ==> "google cloud storage"
+
+create a bucket:  gsutil mb gs://cdebatch58bigquery
+maintain a file:  gsutil cp C:\Education\QT-GCP\BQ\Files\employee_1.csv gs://cdebatch58bigquery
+
+Native table ==> your data will store in bigquery storage 
+External table ==> your data will store on external services (GCS, Drive..)
+
+employeeGCSExt:
+		data storage: GCS bucket 
+		compute: Bigquery
+		
+employeeUpload: [Native]
+		data storage: bigquery storage 
+		compute: Bigquery
+		
+GCS ==> storage operations  [Less money]
+Bigquery ==> storage operation [More money]
+
+Integration of bigquery with gcs service [External Table]
+
+external table creation ==> completed with in milli seconds [data load wont happen on bigquery storage]
+native table creation ==> complete in few seconds [reason is it is loading the data in bigquery storage]
+
+Empty table ==> Native 
+Upload table ==> Native 
+Gcs table ==> Native / External 
+
+"Table is pointing to your gcs bucket file"
+
+*******************************************************************************
+
+Assignment: Load data from google drive to our bigquery table [Exploration about how to do this activity]
+
+*******************************************************************************
