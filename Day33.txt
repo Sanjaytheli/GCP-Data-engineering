@@ -1,0 +1,133 @@
+Bigquery ==>
+	Native tables
+	External tables 
+	
+**************************************************
+
+Bigquery ==> 
+Console ==>
+	APproach1: sql queries ==> how to do our operations (create database,create table,insert data,load data from the file)
+	Approach2: console options ==> how to do our operations (create database,create table,load data from the file)
+	
+Approach3: Cloud sdk shell (create database,create table,insert data,load data from the file)
+
+1. create a database: bq mk -d dbname
+		bq mk -d samplesdk
+		bq query --use_legacy_sql=false "create schema samplesdk1"
+2. to list your databases: bq ls
+3. to list your tables: bq ls databasename
+		bq ls cdebatch581
+4. to create table: 
+
+bq mk -t samplesdk.emp eid:integer,ename:string
+bq query --use_legacy_sql=false "create table samplesdk.emp2 (eid integer,ename string)"
+
+5. to see structure of our table: bq show --schema samplesdk.emp
+6. To load the data into your table:
+		bq load --skip_leading_rows=1 --source_format=CSV samplesdk.emp gs://cdebatch58bigquery/employee_1.csv
+7. TO create and load the data from the file directly:
+
+	bq load --autodetect --source_format=CSV samplesdk.emp1 gs://cdebatch58bigquery/employee_1.csv
+	
+	bq ls samplesdk
+	bq show --schema samplesdk.emp1
+8. TO see the data from the table: [To run the queries:]
+		bq query --use_legacy_sql=false "select * from samplesdk.emp1"
+		
+		note: bq ==> bigquery ==> bq is kind of utility which is availablle on cloud sdk shell 
+		
+		gcs ==> gsutil 
+		bq ==> bq 
+		
+********************************************************************
+
+How many different ways we can create our "Native tables" in bigquery:
+
+Approach1:
+---------- 
+bq query --use_legacy_sql=false "create table samplesdk.employee1 (
+eid integer,
+fname string,
+lname string,
+phone_number string,
+hire_date date,
+job_id string,
+salary integer,
+dept_id string,
+country string)"
+
+Note: in our local sdk shell in current version we can not able to run multi line sdk command, alternative is 
+		option1: better you can pass your complete command in single line
+		option2: you can use "console sdk shell"
+		console ==> left side top ==> click on activate cloud shell ==> authentication ==> open console sdk shell
+		
+bq query --use_legacy_sql=false "create table samplesdk.employee1 (eid integer,fname string,lname string,phone_number string,hire_date date,job_id string,salary integer,dept_id string,country string)"
+
+data loading operation:
+------------------------
+bq load --skip_leading_rows=1 --source_format=CSV samplesdk.employee1 gs://cdebatch58bigquery/employee_1.csv
+
+Approach2:
+----------
+bq load --autodetect --source_format=CSV samplesdk.employee2 gs://cdebatch58bigquery/employee_1.csv
+
+bq query --use_legacy_sql=false "select * from samplesdk.employee2"
+
+Approach3:  [inline schema approach]
+---------
+bq mk -t samplesdk.employee3 eid:integer,fname:string,lname:string,phone_number:string,hire_date:date,job_id:string,salary:integer,dept_id:string,country:string
+
+data loading operation:
+------------------------
+bq load --skip_leading_rows=1 --source_format=CSV samplesdk.employee3 gs://cdebatch58bigquery/employee_1.csv
+
+after 6 months you want to take care of changes on your table ==> at that time you wont have above command handy 
+
+Approach4:  [json schema approach]
+---------
+
+==> keep all the column names and datatypes into a json file ==> by using this json file we can create our table
+
+bq mk -t --schema jsonfilepath databasename.tablename
+
+bq mk -t --schema C:\Education\QT-GCP\BQ\Files\employee_schema.json samplesdk.employee5
+
+data loading operation:
+------------------------
+bq load --skip_leading_rows=1 --source_format=CSV samplesdk.employee5 gs://cdebatch58bigquery/employee_1.csv
+
+Adv: after 6 months you can verify your table structure by using above json file 
+
+"local sdk shell or console sdk shell"
+
+Approach5: [Bigquery console - sql queries]
+-----------
+
+create table samplesdk.employee6 (
+eid integer,
+fname string,
+lname string,
+phone_number string,
+hire_date date,
+job_id string,
+salary integer,
+dept_id string,
+country string
+)
+
+to load data from the file:
+
+Load data into samplesdk.employee6
+from files(
+format='CSV',
+uris=['gs://cdebatch58bigquery/employee_1.csv']
+)
+
+Approach6: [Bigquery console - console options]
+-----------
+
+*********************************************************************************************
+
+HOw to create External tables: [Tomorrows session]
+
+*********************************************************************************************
