@@ -1,0 +1,137 @@
+Bigquery (GCP service):
+
+==> THis is one of the very very important service from cloud data engineer perspective
+==> in real time projects most of the time we are going to work on this service 
+==> as part of interviews also you can get different questions on bigquery service
+
+*****************************************************************************************
+
+what is bigquery?
+
+==> google bigquery is a cloud datawarehouse, by using bigquery service we can able to build DWH system.
+
+what is DWH: Collection of data from different types of the sources and we are converting that into organized format for the purpose of doing analysis to take the decision.
+
+onpremise location ==> with out using cloud also we can build DWH system ==> Teradata, oracle , sql server.. 
+													     ETL Tools ==> informatica, datastage, abintio..
+														 
+Disadvantages of onpremise:
+------------------------
+
+1. You need to setup everything from scratch (servers, machines, softwares..) ==> we need to spend more amount of time and we need to spend more amount of money
+2. Maintenance also will take good amount of time
+3. Increase or decrease number of resources on the fly, it will become very very challenging on onpremise location
+
+To avoid all above disadvantages we can adopt the cloud to build our DWH systems.
+
+GCP ==> DWH ==> bigquery
+AWS ==> DWH ==> Redshift
+Azure ==> DWH ==> synapses
+
+**********************************************************
+
+==> what is the bigquery?
+Bigquery is a cost effective, serverless, auto managed, multi cloud, highly scalable, highly available cloud based DWH service, by using this service we can handle huge amounts of data (peta bytpes of data) with seconds/mins.
+
+cost effective: whatever we are using from bigquery service only for that we need to pay the money.
+	charges:
+		compute: we need to pay little bit more amount of money compare to storage.
+		storage: we need to pay less amount of money compare to compute
+		
+	select * from table; [less amount of money]
+	select sum(sal) as tot_sal from table; [more amount of money]
+	
+	based on complex operations we are going to perform based on that it will charge money.
+
+Multi Cloud:	
+Bigquery service we can able to integrate with other cloud platforms based on our requirements.
+
+Bigquery (GCP) + GCS  (GCP)
+
+GCS ==> storage operations [COmpare to Bigquery on GCS or storage charges are less]
+
+Bigquery (GCP) + S3 buckets (AWS)
+
+Bigquery (GCP  + Azure blob storage (Azure)
+
+serverless:
+
+in biquery it is not going to use any servers [wrong statement] ==> with in bigquery internally it will use servers when we are going to perform our compute or storage operations, as a user you are not going to create any clusters or servers manually as part of using bigquery service.
+
+Fully Managed: 
+while using bigquery service from user side no need to take care of any infra configuration or infra setup activities, all these activities will taken care by google in backend.
+
+highly scalable:
+Based on our requirement on the fly it can able to increase or decrease number of resources.
+
+100GB (Day1)
+1TB   (Day10)
+200GB (Day20)
+
+highly available:
+with out having any down time 24/7 (365 days) we can able to access our bigquery service.
+
+
+==> Bigquery is SQL friendly (whatever operations you want to do on bigquery simply we need to write sql queries)
+==> bigquery will execute all our queries in very very fast manner (lightening fastest queries)
+==> while using bigquery no need to purchase any kind of hardware
+==> bigquery is offering secure and controlled features
+==> Pay as you use 
+
+**********************************************************************************************
+
+I want to do some operations on bigquery ==> 
+
+1. Open GCP console 
+2. Go to bigquery service (search bar or navigation menu)
+		in search bar ==> type bigquery ==> click on bigquery service ==> click on sql query button
+		
+		righ side panel ==> we will write and run the queries 
+		left side panel ==> this is our navigation panel  (to understand what databases and tables you are having)
+		bottom panel ==> for every query you can able to see output in bottom panel 
+		
+==> with in bigquery if you want to do any operations first we need to create database/schema/dataset
+
+create schema cdebatch58;
+
+==> in bigquery we can able to create our tables on above dataset/schema/database
+
+create table cdebatch58.customer
+(
+cust_id integer,
+cust_name string,
+cust_expenses integer
+);
+
+Rule: whenever you are giving table name in bigquery compulsory we have to give it as databasename.tablename
+
+==> in our table we need to insert or load the data 
+
+insert into cdebatch58.customer values(101,'srini',1000);
+insert into cdebatch58.customer values(102,'vasu',2000);
+insert into cdebatch58.customer values(103,'quality',3000);
+
+Note: when you want to trigger multiple queries at at time then we need to give ; at the end of each query
+
+As per best practices, better to give ; for every query.
+
+==> we need to retrieve the data
+
+select * from cdebatch58.customer;
+
+
+==> DDL commands: whenever you want to do any kind of operations on structure perspective
+
+1. to define/create the structure ==> CREATE
+2. Modifying the structure ==> ALTER
+3. Delete the structure ==> DROP
+
+==> DML commands: whenever you want to do any kind of operations on data perspective
+
+1. to define the data ==> INSERT
+2. Modifying the data ==> UPDATE
+3. Delete the data ==> DELETE
+
+==> DRL commands: whenever you want to retrieve the data then we can use "SELECT" statement.
+
+*************************************************************************
