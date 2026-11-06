@@ -1,0 +1,165 @@
+
+100%
+Bigquery - console ==> console options 
+	how to create database 
+	how to create the tables 
+	how many different kinds of the tables we can create 
+	how to load data from the files 
+	
+***************************************************************************
+
+Types of tables in bigquery 
+
+1. Native tables / Managed tables / Internal tables: While dealing with bigquery tables if you are having dependency on "bigquery storage" such kind of tables we can call it as Native tables.
+
+created tables ==> Loading data into this table ==> Bigquery storage [Native tables]
+created tables ==> Loading data into this table ==> data retrieval operation ==> Bigquery storage [Native tables]
+
+
+2. External tables: While dealing with bigquery tables if you are having dependency on "External services" such kind of tables we can call it as External tables.
+
+External services: GCS , Aws S3, Azure blob storage, Google Drive
+
+created tables ==> Loading data into this table ==> External services [External tables]
+created tables ==> Loading data into this table ==> data retrieval operation ==> External services [External tables]
+
+
+As part of external tables ==> your table will point to external service 
+
+==> whole creation of the table we need to specify what type of table you want to use as per your requirement/usecase.
+
+empty ==> Native 
+upload ==> Native 
+drive ==> External 
+GCS  ==> Native 
+	 ==> External
+	 
+create table dbname.tablename(
+col1 datatype,
+col2 datatype
+) ==> by default your table will create it as Native table
+
+create External table dbname.tablename(
+col1 datatype,
+col2 datatype
+) options(
+format="csv",
+uris=["gcabuckefilepath"]
+)
+
+how many ways we can create tables in bigquery:
+	a) sql queries
+	b) console options 
+	
+Scneario1: IN your project your source team sending files to your bucket on daily basis, every day when I am sending the files we will delete previous day files.
+
+Day1:
+customer_20260806.csv 
+
+Day2:
+customer_20260806.csv (delete file)
+customer_20260807.csv 
+
+Day3: 
+customer_20260807.csv (delete file) 
+customer_20260808.csv 
+
+what kind of table we need to create here ?? [Native table]
+
+customer_20260806.csv  ==> bigquery table [bigquery storage]
+customer_20260807.csv  ==> bigquery table [bigquery storage]
+customer_20260808.csv  ==> bigquery table [bigquery storage]
+
+After loading the data into bigquery storage (native table) , after that if your source team is going to delete the files from gcs bucket "there wont be any impact on our bigquery table"
+
+select * from Nativetable; [triggering it on day3 ==> we can see data for day1+day2+day3]
+
+For example ==> if you are going to create it as External table 
+
+select * from Externaltable; [triggering it on day3 ==> we can see data for day3] [with this consideration we are not going to create this table as external table in this scenario]
+
+
+Scneario2: IN your project your source team sending files to your bucket on daily basis, every day when I am sending the files we will not delete previous day files.
+
+Day1:
+customer_20260806.csv 
+
+Day2:
+customer_20260806.csv 
+customer_20260807.csv 
+
+Day3: 
+customer_20260806.csv 
+customer_20260807.csv 
+customer_20260808.csv 
+
+In this scenario what type of table we need to create ?? [Native table & External table] [Best approach - create it as external table]
+
+If you are going to create it as Native table ==> this data will sit on bigquery storage ==> coming to day3 in how many places we are having same data [Bigquery storage + GCS bucket] ==> this we can call it as duplicate/redudant data ==> because of this reason we need to pay money for Bigquery storage + GCS service ==> because of this reason cost is going to increase in our project 
+
+To avoid above cost ==> better we need to create our table as External table ==> Now your data will sit only on our gcs bucket (it is not going to use bigquery storage) ==> you will pay money for only gcs service from storage perspective
+
+select * from Externaltable; [triggering it on day3 ==> we can see data for day1+day2+day3] 
+
+==> in real time projects who will decide whether we need to use Native or external tables [Data modelers/Data architect]
+
+==> in real time who will create the table as Native or external ==> [CLoud data engineer]
+
+who will decide your table name / column name / datatype ==> [Data modelers/Data architect]
+
+Q1: If I am going to drop Native table, is there any impact on our gcs bucket file ?
+
+GCS bucket file ==> loading the data into your table ==> Native table ==> dropping this native table
+	a) it will delete the file from gcs bucket 
+	b) it will delete the data from bigquery 
+	c) it will delete the data from both gcs bucket and bigquery 
+	d) none of the above 
+	
+Answer: b
+
+dropping this native table [delete structure+delete data]
+
+Q2: If I am going to drop External table, is there any impact on our gcs bucket file ?
+
+GCS bucket file ==> loading the data into your table ==> Native table ==> dropping this native table
+	a) it will delete the file from gcs bucket 
+	b) it will delete the data from bigquery 
+	c) it will delete the data from both gcs bucket and bigquery 
+	d) none of the above
+	
+Answer: d
+
+delete file from the bucket ==> drop table exteranltable; [no]
+							==> gsutil rm filename
+							
+drop table exteranltable; [it will remove linkage from table to bucket file]
+						   [it will delete structure of your table from biquery]
+						   
+********************************************************************************
+
+NativeTable ==> bigquery storage 
+ExternalTable ==> External services 
+
+********************************************************************************
+
+native table ==> structure + data (bigquery storage)
+external table ==> structure 
+
+select * from externaltable; [GCS service]
+
+********************************************************************************
+
+Performance:
+
+We can not able to give generic statements as Native table is good or External table is good
+
+==> while creation and loading data into our bigquery ==> [External Table]
+==> if you are going to retrieve the data ==> [Native Table]
+==> when we are going to perform complex data processing operations ==> {native tables} [reason: data is sitting on bigquery storage, because of that reason bigquery internally will apply optimizations]
+
+********************************************************************************
+
+Assignment: Write all the differences between Native and External tables [dont use chatgpt/gemini/claude..] 
+(srinivasqt@gmail.com)
+
+********************************************************************************
