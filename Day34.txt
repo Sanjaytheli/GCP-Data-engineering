@@ -1,0 +1,176 @@
+Bigquery ==> how many different ways we can create Native tables
+
+*************************************************************
+
+How to create our external tables:
+
+Approach1: [console - sql queries]
+----------
+
+create External table samplesdk.employeeExt1 (
+eid integer,
+fname string,
+lname string,
+phone_number string,
+hire_date date,
+job_id string,
+salary integer,
+dept_id string,
+country string
+)options(
+format='CSV',
+uris=['gs://cdebatch58bigquery/employee_1.csv'],
+skip_leading_rows=1
+)
+
+Loading operation - not required
+
+Approach2: [console - Console options]
+----------
+
+Approach3:  [SDK shell] [Here we are getting column names and datatype automatically]
+----------
+
+command1: [to define properties of external table]
+
+bq mkdef --source_format=CSV --autodetect=true gs://cdebatch58bigquery/employee_1.csv > mytable_def
+
+
+command2: [By using above variable we will create our external table]
+
+bq mk --table --external_table_definition=mytable_def samplesdk.employeeExt2
+
+Loading operation - not required
+
+
+Approach4:  [SDK shell] {I want to define my onw column names and datatype}
+----------
+
+command1: [to define properties of external table]
+
+bq mkdef --source_format=CSV gs://cdebatch58bigquery/employee_1.csv > mytable_def1
+
+
+command2: [By using above variable we will create our external table]
+
+bq mk --table --external_table_definition=mytable_def1 samplesdk.employeeExt3 eid:integer,fname:string,lname:string,phone_number:string,hire_date:date,job_id:string,salary:integer,dept_id:string,country:string
+
+Loading operation - not required
+
+
+bq ls samplesdk
+********************************************************************************************************
+
+==> On top of existing table I want to add one addition column 
+
+alter table samplesdk.employee2 add column id1 integer
+
+bq query --use_legacy_sql=false "alter table samplesdk.employee2 add column id1 integer"
+
+==> I want to see data in Id1 column as 100
+
+update samplesdk.employee2 set id1=100 where 1=1;
+
+==> I want to remove this column from the table 
+
+alter table samplesdk.employee2 drop column id1;
+
+********************************************************************************************************
+
+Create backup tables: [In real time projects we need to create backup tables as per requirements]
+---------------------
+
+samplesdk.employee2 ==> samplesdk.employee2bkp
+
+backup table ==> we need to maintain same structure + same data into other table 
+
+Approach1:
+----------
+step1:
+create table samplesdk.employee2bkp like samplesdk.employee2;
+
+step2:
+insert into samplesdk.employee2bkp 
+select * from samplesdk.employee2;
+
+Approach2:
+----------
+create table samplesdk.employee2bkp1 as (select * from samplesdk.employee2);
+
+==> Create backup table employee2 by using only eid,fname,lname,dept_id columns and also in this backup table I want to maintain data for only dept_id=60 records [partial backup table]
+
+
+create table samplesdk.employee2bkp2 as (select eid,fname,lname,dept_id from samplesdk.employee2 where dept_id='60');
+
+***********************************************************************************************************
+
+Airflow ==> scheduling + orchestration 
+	Dag ==> Airflow bigquery operators 
+	
+Airflow + Dataproc (dataproc operators)
+
+***********************************************************************************************************
+
+==> How to create and load data from drive file 
+
+prerequisite:
+	1. upload file into our google drive
+	
+	https://drive.google.com/file/d/1mEzzsO0CODgUxzcXzH856-lzHRCOsFHH/view?usp=drive_link
+	
+Bigquery console: 
+
+https://drive.google.com/open?id=1mEzzsO0CODgUxzcXzH856-lzHRCOsFHH
+
+*********************************************************************************
+
+How to understand type of the table:
+
+Approach1: (sdk shell)
+bq ls samplesdk
+
+Aproach2: [console - console options]
+click on your table in console ==> if you can able to see preview option that is native table, otherwise that is our external table 
+Click on your table ==> click on details tab ==> by using this also we can identify your table type 
+
+Approach3: [console - sql query] [what all are the tables we are having and which table belongs to what type]
+
+select table_name,table_type from samplesdk.INFORMATION_SCHEMA.TABLES
+
+
+TABLES ==> this is our system table , it contain all the tables information
+
+base table / native table / managed table / internal table 
+
+***************************************************************************
+
+I want to see all the column details of a particular table 
+
+Aproach1: [console - console options]
+Click on your table ==> click on schema tab 
+
+Approach2: [console - sql query]
+
+select * from samplesdk.INFORMATION_SCHEMA.COLUMNS
+
+COLUMNS ==> this is our system table , which contain all the columns information
+
+select * from samplesdk.INFORMATION_SCHEMA.COLUMNS where table_name='employee2';
+
+***************************************************************************
+
+==> whenever you are creating a table ==> that table structure will store on system tables internally [Tables & Columns]
+
+==> whenever we are going to drop our table ==> then table structure will delete on system tables internally [Tables & Columns]
+
+all operations will happen on system tables in automated manner
+
+***************************************************************************
+
+1. how many ways we can create our external tables 
+2. how to create external table by using drive 
+3. how to identify your table type 
+4. how to create backup tables 
+5. what all are system tables we are having 
+
+***************************************************************************
