@@ -1,0 +1,92 @@
+How to handle external tables:
+
+****************************************
+
+==> IN bigquery we are having storage layer and compute layer 
+==> Both these storage and compute layers are decoupled each other (there is no dependency between storage and compute layer)
+
+there is no dependency between storage and compute layer ==> [this is not always true]
+
+==> if you are loading the data into your table ==> [storage layer]
+==> if you are performing compute operations or data retrieval operations by applying our data processing logic ==> [Compute layer + storage layer will work together]
+
+==> your compute operations are completed ==> [still is there any use of compute layer ==> NO]
+==> your compute operations are completed ==> [still is there any use of storage layer ==> YES]
+
+storage layer [Colossus]
+compute layer [DREMEL]
+Communication Layer [Jupyter]
+Orchestration Layer [BORG]
+
+Bigquery Architecture:
+----------------------
+
+==> Google bigquery architecture is designed to handle large scale data processing and analysis in distributed , serverless and highly scalable manner.
+==> It seperates storage and compute, which allows efficient querying and analysis on massive datasets.
+
+storage layer [Colossus]:
+--------------------------
+==> Bigquery data storage is handle by a distributed file system called as "capacitor".
+==> with in Colossus whatever data it is going to store that data will store in "Columnar format", which enables efficient compression and minimizes the amount of data read during queries.
+==> capacitor automatically manages data distribution and replication across multiple nodes for high availability and durability.
+
+compute layer [DREMEL]:
+---------------------
+==> Bigquery compute layer includes the execution of sql queries and other data processing tasks.
+==> it uses a technique called as dynamic runtime filter (DRF) to distribute query execution across a fleet of workers called as "slots".
+==> DRF helps parallel execution of your queries and data processing, with this we can complete all our compute operations in very very fast manner.
+
+Root Server 
+Leaf nodes
+mixer nodes
+
+
+select * from customer; [console ==> run button ==> display results]
+
+whenever you are running internally what is going to happen ? 
+
+step1: whenever you run your queries those queries will go to "ROOT SERVER" with in dremel component
+	a) root server will parse your entire query [select , * , from , customer]
+	b) root server will verify all keywords are correct or not , and also root server will verify give table and column names are present in bigquery or not.
+	c) if any keywords are wrong or if any table or columns are not available, then root server will send Error message.
+	d) this root server will store all the metadata of our tables (table name, column names, datatypes..)
+	e) if your query is not having any kind of issues, then Root server will prepare the plan to run your query.
+		plan:
+			t1:
+			t2:
+			t3:
+			t4:
+	f) once plan is ready then this plan will send to "Leaf nodes"
+	
+Leaf nodes: 
+ - Leaf nodes are responsible for storing and processing the data
+ - They execute all the queries in parallel manner and it will store all the intermediate results of our sql queries
+ 
+ Leaf nodes ==> data processing operations ==> Jupyter ==> Colossus
+ - Leaf nodes will send all these intermediate results to the "mixer nodes"
+ 
+Mixer nodes:
+ - Mixers play a role to combine the intermediate results or it aggregate all the intermediate results which it is getting from different leaf nodes, with that it will create final result 
+ - this final result will send back to root server, then from root server this result will display in console or sdk shell.
+ 
+ submit query ==> Root server ==> Plan ==> Leaf nodes ==> intermediate results ==> mixer nodes ==> final result ==> root server ==> console/sdk shell 
+ 
+ ""node/server ==> VM/processor""
+ 
+ internally it will create all above nodes on the fly based on requirement ==> but how it will decide how many nodes are required + who will start all these nodes + who will stop all these nodes + who will decide how many nodes are required ==> "BORG"
+ 
+BORG: 
+	- it will decide how many nodes are required as part of your data processing operations 
+	- it will start and stop the nodes based on your query execution 
+	- it will take care of all the orchestration activities with in bigquery as part of our query execution
+	
+**************************************************************************************************
+
+""why we are disusing is you are going to work as experienced person""
+
+1. explain bigquery architecture 
+2. explain what is the purpose of capacitor 
+3. what is slot 
+4. what is DRF
+
+**************************************************************************************************
